@@ -1,9 +1,10 @@
 <script setup>
 import { ref } from 'vue'
+import { openaiApiKey } from './settings'
 import Settings from './components/Settings.vue'
 import ChatInput from './components/ChatInput.vue'
 
-const showSettings = ref(false)
+const showSettings = ref(!openaiApiKey.value)
 </script>
 
 <template>

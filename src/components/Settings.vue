@@ -1,8 +1,11 @@
+<script setup>
+import { openaiApiKey } from '../settings'
+</script>
+
 <template>
 <div class="settings">
   <div class="row">
-    <input type="text" placeholder="OPENAI API KEY" />
-    <button>设置</button>
+    <input type="text" placeholder="OPENAI API KEY" v-model="openaiApiKey" />
   </div>
 </div>
 </template>
