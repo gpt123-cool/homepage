@@ -15,7 +15,7 @@ const cMessages = computed({
 </script>
 
 <template>
-<div v-for="msg of cMessages" :class="{ row: true, user: msg.role === 'user' }">
+<div v-for="msg of cMessages" :class="{ row: true, user: msg.role === 'user', error: msg.error }">
   <div class="avatar bot"><img v-if="msg.role === 'assistant'" src="../assets/bot.svg" /></div>
   <markdown class="content" :source="msg.content"></markdown>
   <div class="avatar" v-if="msg.role === 'user'"><font-awesome-icon icon="fa-solid fa-user" /></div>
@@ -54,6 +54,12 @@ const cMessages = computed({
       flex-grow: 0;
       background-color: #59b169;
       color: #000;
+    }
+  }
+
+  &.error {
+    .content {
+      color: red;
     }
   }
 }
