@@ -12,7 +12,6 @@ async function sendMessage() {
 
 const showInput = computed({
   get() {
-    console.log(messages.value[messages.value.length - 1])
     return messages.value.length === 0 || messages.value[messages.value.length - 1].role !== 'user'
   }
 })
