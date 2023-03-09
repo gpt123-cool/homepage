@@ -1,6 +1,9 @@
 <script setup>
+import { ref } from 'vue'
 import Settings from './components/Settings.vue'
 import ChatInput from './components/ChatInput.vue'
+
+const showSettings = ref(false)
 </script>
 
 <template>
@@ -9,9 +12,11 @@ import ChatInput from './components/ChatInput.vue'
     <span>狗屁通</span>
     <span class="ph">123</span>
     <span class="cool">Cool</span>
+    <div style="flex-grow: 1;"></div>
+    <a :class="{ active: showSettings }"><font-awesome-icon icon="fa-solid fa-gear" @click="showSettings = !showSettings" /></a>
   </div>
-  <settings />
-  <div class="content">
+  <settings v-if="showSettings" />
+  <div class="content" v-if="!showSettings">
     <chat-input />
   </div>
 </template>
@@ -41,6 +46,13 @@ import ChatInput from './components/ChatInput.vue'
     background: linear-gradient(to right, rgba(56,189,248,var(--un-from-opacity, 1)), rgba(5,150,105,var(--un-to-opacity, 1)));
     -webkit-background-clip: text;
     color: transparent;
+  }
+  a {
+    padding: 0 5px;
+
+    &.active {
+      background-color: #94A3B826;
+    }
   }
 }
 .content {
