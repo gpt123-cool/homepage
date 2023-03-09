@@ -11,9 +11,11 @@ import Messages from './components/Messages.vue'
 const showSettings = ref(!openaiApiKey.value)
 const bottom = ref()
 
-watch(() => messages.value.length > 0 && (_.last(messages.value).thinking + _.last(messages.value).content.length), () => {
+function scroll() {
   setTimeout(() => bottom.value.scrollIntoView(), 100)
-})
+}
+
+watch(() => messages.value.length > 0 && (_.last(messages.value).thinking + _.last(messages.value).content.length), scroll)
 </script>
 
 <template>
@@ -28,7 +30,7 @@ watch(() => messages.value.length > 0 && (_.last(messages.value).thinking + _.la
   <settings v-if="showSettings" @SETTINGS_OK="showSettings = false" />
   <div class="content" v-if="!showSettings">
     <messages />
-    <chat-input />
+    <chat-input @SEND="scroll" />
   </div>
   <div ref="bottom"></div>
 </template>

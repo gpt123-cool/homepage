@@ -3,8 +3,10 @@ import { ref, computed } from 'vue'
 import { messages, completions } from '../api'
 
 const message = ref('')
+const emit = defineEmits()
 
 async function sendMessage() {
+  emit('SEND')
   const msg = message.value
   message.value = ''
   await completions(msg)
