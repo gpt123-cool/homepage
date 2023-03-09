@@ -1,4 +1,5 @@
 <script setup>
+import _ from 'lodash'
 import { ref, watch } from 'vue'
 
 import { openaiApiKey } from './settings'
@@ -9,8 +10,9 @@ import Messages from './components/Messages.vue'
 
 const showSettings = ref(!openaiApiKey.value)
 const bottom = ref()
-watch(() => messages.value.length > 0 && messages.value[messages.value.length - 1].content, () => {
-  setTimeout(() => bottom.value.scrollIntoView({ behavior: 'smooth' }), 50);
+
+watch(() => messages.value.length > 0 && (_.last(messages.value).thinking + _.last(messages.value).content.length), () => {
+  setTimeout(() => bottom.value.scrollIntoView(), 100)
 })
 </script>
 

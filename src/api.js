@@ -1,3 +1,4 @@
+import _ from 'lodash'
 import { fetchEventSource } from '@microsoft/fetch-event-source'
 import { ref } from 'vue'
 
@@ -21,13 +22,13 @@ export async function completions(content) {
         onmessage(msg) {
           const { data } = msg
           if (data === '[DONE]') {
-            delete messages.value[messages.value.length - 1].thinking
+            delete _.last(messages.value).thinking
           } else {
             const { choices: [{ delta }] } = JSON.parse(data)
             if (delta.role) {
               messages.value.push({ ...delta, content: '', thinking: true })
             } else if (delta.content) {
-              messages.value[messages.value.length - 1].content += delta.content
+              _.last(messages.value).content += delta.content
             }
           }
         }
