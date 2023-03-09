@@ -1,11 +1,17 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
+
 import { openaiApiKey } from './settings'
+import { messages } from './api'
 import Settings from './components/Settings.vue'
 import ChatInput from './components/ChatInput.vue'
 import Messages from './components/Messages.vue'
 
 const showSettings = ref(!openaiApiKey.value)
+const bottom = ref()
+watch(() => messages.value.length, () => {
+  setTimeout(() => bottom.value.scrollIntoView({ behavior: 'smooth' }), 50);
+})
 </script>
 
 <template>
@@ -22,6 +28,7 @@ const showSettings = ref(!openaiApiKey.value)
     <messages />
     <chat-input />
   </div>
+  <div ref="bottom"></div>
 </template>
 
 <style scoped lang="scss">

@@ -9,7 +9,7 @@ export async function completions(content) {
   messages.value.push({ role: 'user', content })
   const { data: { choices: [{ message }] } } = await axios.post(
     'https://gpt123.cool/v1/chat/completions',
-    JSON.stringify({ model: 'gpt-3.5-turbo', temperature: 0.6, messages: messages.value }),
+    JSON.stringify({ model: 'gpt-3.5-turbo', temperature: 0.6, messages: messages.value.slice(-10) }),
     {
       headers: {
         'Authorization': `Bearer ${openaiApiKey.value}`,
@@ -19,5 +19,4 @@ export async function completions(content) {
   )
 
   messages.value.push(message)
-  if (messages.value.length > 10) message.value.shift()
 }
