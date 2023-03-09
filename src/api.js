@@ -1,4 +1,4 @@
-import axios from 'axios'
+import { fetchEventSource } from '@microsoft/fetch-event-source'
 import { ref } from 'vue'
 
 import { openaiApiKey } from './settings'
@@ -8,18 +8,30 @@ export const messages = ref([])
 export async function completions(content) {
   try {
     messages.value.push({ role: 'user', content })
-    const { data: { choices: [{ message }] } } = await axios.post(
+    await fetchEventSource(
       'https://gpt123.cool/v1/chat/completions',
-      JSON.stringify({ model: 'gpt-3.5-turbo', temperature: 0.6, messages: messages.value.slice(-10) }),
       {
+        method: 'POST',
+        body: JSON.stringify({ stream: true, model: 'gpt-3.5-turbo', temperature: 0.6, messages: messages.value.slice(-10) }),
         headers: {
           'Authorization': `Bearer ${openaiApiKey.value}`,
           'Content-Type': 'application/json'
+        },
+        onmessage(msg) {
+          const { data } = msg
+          if (data === '[DONE]') {
+            delete messages.value[messages.value.length - 1].thinking
+          } else {
+            const { choices: [{ delta }] } = JSON.parse(data)
+            if (delta.role) {
+              messages.value.push({ ...delta, content: '', thinking: true })
+            } else if (delta.content) {
+              messages.value[messages.value.length - 1].content += delta.content
+            }
+          }
         }
       }
     )
-
-    messages.value.push(message)
   } catch(e) {
     const err = e.response ? e.response.data.error.message : e.message
     messages.value.push({ role: 'assistant', content: err || e.message || e.toString(), error: true })

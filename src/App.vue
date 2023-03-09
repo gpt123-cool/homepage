@@ -9,7 +9,7 @@ import Messages from './components/Messages.vue'
 
 const showSettings = ref(!openaiApiKey.value)
 const bottom = ref()
-watch(() => messages.value.length, () => {
+watch(() => messages.value.length > 0 && messages.value[messages.value.length - 1].content, () => {
   setTimeout(() => bottom.value.scrollIntoView({ behavior: 'smooth' }), 50);
 })
 </script>

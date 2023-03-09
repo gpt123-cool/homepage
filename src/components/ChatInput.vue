@@ -12,7 +12,9 @@ async function sendMessage() {
 
 const showInput = computed({
   get() {
-    return messages.value.length === 0 || messages.value[messages.value.length - 1].role !== 'user'
+    return messages.value.length === 0 ||
+      messages.value[messages.value.length - 1].role !== 'user' &&
+      !messages.value[messages.value.length - 1].thinking
   }
 })
 </script>
