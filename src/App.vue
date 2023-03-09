@@ -1,4 +1,5 @@
 <script setup>
+import Settings from './components/Settings.vue'
 import ChatInput from './components/ChatInput.vue'
 </script>
 
@@ -9,6 +10,7 @@ import ChatInput from './components/ChatInput.vue'
     <span class="ph">123</span>
     <span class="cool">Cool</span>
   </div>
+  <settings />
   <div class="content">
     <chat-input />
   </div>
