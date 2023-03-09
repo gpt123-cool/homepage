@@ -3,6 +3,7 @@ import { ref } from 'vue'
 import { openaiApiKey } from './settings'
 import Settings from './components/Settings.vue'
 import ChatInput from './components/ChatInput.vue'
+import Messages from './components/Messages.vue'
 
 const showSettings = ref(!openaiApiKey.value)
 </script>
@@ -18,6 +19,7 @@ const showSettings = ref(!openaiApiKey.value)
   </div>
   <settings v-if="showSettings" />
   <div class="content" v-if="!showSettings">
+    <messages />
     <chat-input />
   </div>
 </template>
