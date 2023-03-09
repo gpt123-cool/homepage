@@ -12,11 +12,12 @@ export async function completions(content) {
       'https://gpt123.cool/v1/chat/completions',
       {
         method: 'POST',
-        body: JSON.stringify({ stream: true, model: 'gpt-3.5-turbo', temperature: 0.6, messages: messages.value.slice(-10) }),
+        body: JSON.stringify({ stream: true, model: 'gpt-3.5-turbo', temperature: 0.6, messages: messages.value.filter(m => !m.error).slice(-10) }),
         headers: {
           'Authorization': `Bearer ${openaiApiKey.value}`,
           'Content-Type': 'application/json'
         },
+        onerror(e) { throw e },
         onmessage(msg) {
           const { data } = msg
           if (data === '[DONE]') {
@@ -33,7 +34,8 @@ export async function completions(content) {
       }
     )
   } catch(e) {
-    const err = e.response ? e.response.data.error.message : e.message
-    messages.value.push({ role: 'assistant', content: err || e.message || e.toString(), error: true })
+    // const err = e.response ? e.response.data.error.message : e.message
+    // messages.value.push({ role: 'assistant', content: err || e.message || e.toString(), error: true })
+    messages.value.push({ role: 'assistant', error: true, content: '请求错误，检查API KEY是否正确，以及是否还有访问限额。' })
   }
 }
