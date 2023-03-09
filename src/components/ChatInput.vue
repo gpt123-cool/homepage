@@ -19,7 +19,7 @@ const showInput = computed({
 
 <template>
   <div class="chat-input" v-if="showInput">
-    <textarea type="text" placeholder="说点啥..." rows="1" v-model="message" />
+    <input type="text" placeholder="说点啥..." v-model="message" />
     <button @click="sendMessage">发送</button>
   </div>
 </template>
