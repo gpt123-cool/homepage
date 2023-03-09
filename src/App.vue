@@ -1,4 +1,5 @@
 <script setup>
+import ChatInput from './components/ChatInput.vue'
 </script>
 
 <template>
@@ -8,19 +9,22 @@
     <span class="ph">123</span>
     <span class="cool">Cool</span>
   </div>
+  <div class="content">
+    <chat-input />
+  </div>
 </template>
 
 <style scoped lang="scss">
 .head {
   display: flex;
   align-items: center;
+  gap: 5px;
   font-size: 24px;
   font-weight: bold;
   .logo {
     height: 48px;
     will-change: filter;
     transition: filter 300ms;
-    margin-right: 10px;
   }
   .logo:hover {
     filter: drop-shadow(0 0 2em #646cffaa);
@@ -29,7 +33,6 @@
     color: #000;
     background-color: #ff9900;
     border-radius: 3px;
-    margin: 5px;
     padding: 0 5px;
   }
   .cool{
@@ -37,5 +40,8 @@
     -webkit-background-clip: text;
     color: transparent;
   }
+}
+.content {
+  padding-top: 40px;
 }
 </style>
