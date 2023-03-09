@@ -19,4 +19,5 @@ export async function completions(content) {
   )
 
   messages.value.push(message)
+  if (messages.value.length > 10) message.value.shift()
 }
