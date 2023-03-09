@@ -23,7 +23,7 @@ watch(() => messages.value.length, () => {
     <div style="flex-grow: 1;"></div>
     <a :class="{ active: showSettings }"><font-awesome-icon icon="fa-solid fa-gear" @click="showSettings = !showSettings" /></a>
   </div>
-  <settings v-if="showSettings" />
+  <settings v-if="showSettings" @SETTINGS_OK="showSettings = false" />
   <div class="content" v-if="!showSettings">
     <messages />
     <chat-input />

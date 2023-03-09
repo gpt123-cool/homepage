@@ -6,6 +6,7 @@ import { openaiApiKey } from '../settings'
 <div class="settings">
   <div class="row">
     <input type="text" placeholder="OPENAI API KEY" v-model="openaiApiKey" />
+    <button @click="$emit('SETTINGS_OK')">OK</button>
   </div>
 </div>
 </template>
