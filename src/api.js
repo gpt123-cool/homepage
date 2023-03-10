@@ -15,7 +15,7 @@ export async function completions(content) {
         method: 'POST',
         body: JSON.stringify({ stream: true, model: 'gpt-3.5-turbo', temperature: 0.6, messages: messages.value.filter(m => !m.error).slice(-10) }),
         headers: {
-          'Authorization': `Bearer ${openaiApiKey.value}`,
+          'Authorization': `Bearer ${openaiApiKey.value.trim()}`,
           'Content-Type': 'application/json'
         },
         onerror(e) { throw e },
