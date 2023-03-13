@@ -13,6 +13,7 @@
     "@fortawesome/free-solid-svg-icons": "^6.3.0",
     "@fortawesome/vue-fontawesome": "^3.0.3",
     "@microsoft/fetch-event-source": "^2.0.1",
+    "highlight.js": "^11.7.0",
     "lodash": "^4.17.21",
     "sass": "^1.58.3",
     "vue": "^3.2.45",

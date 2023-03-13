@@ -40,9 +40,9 @@ const cMessages = computed({
   .content {
     flex-grow: 1;
     padding: 0 10px;
-    overflow-x: auto;
     text-align: left;
     background-color: #94A3B826;
+    overflow-x: hidden;
   }
 
   &.user {
