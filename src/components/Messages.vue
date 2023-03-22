@@ -1,28 +1,23 @@
 <script setup>
-import { computed } from 'vue'
 import Markdown from 'vue3-markdown-it';
 
 import { messages } from '../api'
-
-const cMessages = computed({
-  get() {
-    return [
-      ...messages.value,
-      ...messages.value.length > 0 && messages.value[messages.value.length - 1].role === 'user' ? [{ role: 'assistant', content: 'AI正在思考...' }] : []
-    ]
-  }
-})
 </script>
 
 <template>
-<div v-for="msg of cMessages" :class="{ row: true, user: msg.role === 'user', error: msg.error }">
-  <div class="avatar bot"><img v-if="msg.role === 'assistant'" src="../assets/bot.svg" /></div>
-  <markdown class="content" :source="msg.content"></markdown>
-  <div class="avatar" v-if="msg.role === 'user'"><font-awesome-icon icon="fa-solid fa-user" /></div>
+<div class="messages">
+  <div v-for="msg of messages" :class="{ row: true, user: msg.role === 'user', error: msg.error }">
+    <div class="avatar bot"><img v-if="msg.role === 'assistant'" src="../assets/bot.svg" /></div>
+    <markdown class="content" :source="msg.content"></markdown>
+    <div class="avatar" v-if="msg.role === 'user'"><font-awesome-icon icon="fa-solid fa-user" /></div>
+  </div>
 </div>
 </template>
 
 <style scoped lang="scss">
+.messages {
+  flex-grow: 1;
+}
 .row {
   display: flex;
   align-items: start;

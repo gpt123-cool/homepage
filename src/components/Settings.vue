@@ -14,7 +14,6 @@ import { openaiApiKey } from '../settings'
 
 <style scoped lang="scss">
 .settings {
-  padding-top: 40px;
   .row {
     display: flex;
     gap: 10px;

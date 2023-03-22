@@ -24,7 +24,6 @@ a {
 body {
   margin: 0;
   display: flex;
-  place-items: center;
   min-width: 320px;
   min-height: 100vh;
 }
@@ -68,11 +67,14 @@ button:focus-visible {
 }
 
 #app {
+  display: flex;
+  gap: 20px;
+  flex-direction: column;
   box-sizing: border-box;
-  max-width: 540px;
+  max-width: 888px;
   width: 100%;
   margin: 0 auto;
-  padding: 2rem 0.5em;
+  padding: 0.5em;
   text-align: center;
 }
 
