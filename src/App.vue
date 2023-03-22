@@ -69,8 +69,12 @@ const bottom = ref()
   }
 }
 .content {
-  flex-grow: 1;
-  flex-direction: column;
+  flex: 1;
+  flex-shrink: 0;
+  height: 0;
+
   display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 </style>

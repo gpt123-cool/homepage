@@ -1,4 +1,5 @@
 <script setup>
+import _ from 'lodash'
 import { ref, computed } from 'vue'
 import { messages, completions } from '../api'
 
@@ -12,19 +13,18 @@ async function sendMessage() {
   await completions(msg)
 }
 
-const showInput = computed({
+const isThinking = computed({
   get() {
-    return messages.value.length === 0 ||
-      messages.value[messages.value.length - 1].role !== 'user' &&
-      !messages.value[messages.value.length - 1].thinking
+    return messages.value.length > 0 &&
+      (_.last(messages.value).role === 'user' || _.last(messages.value).thinking)
   }
 })
 </script>
 
 <template>
-  <div class="chat-input" v-if="showInput">
-    <input type="text" placeholder="说点啥..." v-model="message" />
-    <button @click="sendMessage">发送</button>
+  <div class="chat-input">
+    <input type="text" :placeholder="isThinking ? 'AI思考中...' : '说点啥...'" v-model="message" :disabled="isThinking" />
+    <button @click="sendMessage" v-if="!isThinking">发送</button>
   </div>
 </template>
 

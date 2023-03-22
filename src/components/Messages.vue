@@ -16,7 +16,10 @@ import { messages } from '../api'
 
 <style scoped lang="scss">
 .messages {
-  flex-grow: 1;
+  flex: 1;
+  flex-shrink: 0;
+  height: 0;
+  overflow-y: scroll;
 }
 .row {
   display: flex;
@@ -38,6 +41,10 @@ import { messages } from '../api'
     text-align: left;
     background-color: #94A3B826;
     overflow-x: hidden;
+  }
+
+  &:last-child {
+    margin: 0;
   }
 
   &.user {
