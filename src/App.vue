@@ -28,10 +28,8 @@ const bottom = ref()
     <a :class="{ active: showSettings }"><font-awesome-icon icon="fa-solid fa-gear" @click="showSettings = !showSettings" /></a>
   </div>
   <settings v-if="showSettings" @SETTINGS_OK="showSettings = false" />
-  <div class="content" v-if="!showSettings">
-    <messages />
-    <chat-input />
-  </div>
+  <messages v-if="!showSettings" />
+  <chat-input v-if="!showSettings" />
 </template>
 
 <style scoped lang="scss">
@@ -67,14 +65,5 @@ const bottom = ref()
       background-color: #94A3B826;
     }
   }
-}
-.content {
-  flex: 1;
-  flex-shrink: 0;
-  height: 0;
-
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
 }
 </style>
