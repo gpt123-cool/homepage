@@ -1,7 +1,20 @@
 import { ref, watch } from 'vue'
 
+const roles = [{
+  name: '-'
+}, {
+  name: '作图',
+  message: '将我说的话转换成对一幅图像的描述',
+  draw: true
+}, {
+  name: '成语接龙',
+  message: '我们来玩四字成语接龙，你回复的成语的第一个字要是我说的成语的最后一个字'
+}]
+
 const LSK = 'OPENAI_API_KEY'
 const openaiApiKey = ref(localStorage.getItem(LSK))
 watch(openaiApiKey, v => localStorage.setItem(LSK, v.trim()))
 
-export { openaiApiKey }
+const role = ref(roles[0])
+
+export { roles, role, openaiApiKey }
