@@ -23,7 +23,7 @@ const isThinking = computed({
 
 <template>
   <div class="chat-input">
-    <input type="text" :placeholder="isThinking ? 'AI思考中...' : '说点啥...'" v-model="message" :disabled="isThinking" />
+    <input @keyup.enter="sendMessage" type="text" :placeholder="isThinking ? 'AI思考中...' : '说点啥...'" v-model="message" :disabled="isThinking" />
     <button @click="sendMessage" v-if="!isThinking">发送</button>
   </div>
 </template>
