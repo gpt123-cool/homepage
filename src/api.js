@@ -2,18 +2,21 @@ import _ from 'lodash'
 import { fetchEventSource } from '@microsoft/fetch-event-source'
 import { ref } from 'vue'
 
-import { openaiApiKey } from './settings'
+import { openaiApiKey, role } from './settings'
 
 export const messages = ref([])
 
 export async function completions(content) {
   try {
     messages.value.push({ role: 'user', content })
+    const messagesToSend = messages.value.filter(m => !m.error && (m.role === 'user' || m.role === 'assistant')).slice(-10)
+    if (role.value.message) messagesToSend.unshift({ role: 'system', content: role.value.message })
+
     await fetchEventSource(
       'https://gpt123.cool/v1/chat/completions',
       {
         method: 'POST',
-        body: JSON.stringify({ stream: true, model: 'gpt-3.5-turbo', temperature: 0.6, messages: messages.value.filter(m => !m.error).slice(-10) }),
+        body: JSON.stringify({ stream: true, model: 'gpt-3.5-turbo', temperature: 0.6, messages: messagesToSend }),
         headers: {
           'Authorization': `Bearer ${openaiApiKey.value.trim()}`,
           'Content-Type': 'application/json'
