@@ -1,7 +1,7 @@
 <script setup>
 import _ from 'lodash'
 import { ref, computed } from 'vue'
-import { messages, completions } from '../api'
+import { messages, completions, draw, drawing } from '../api'
 import { role } from '../settings'
 
 const message = ref('')
@@ -13,13 +13,10 @@ async function sendMessage() {
   await completions(msg)
 }
 
-async function draw() {
-}
-
 const isThinking = computed({
   get() {
     return messages.value.length > 0 &&
-      (_.last(messages.value).role === 'user' || _.last(messages.value).thinking)
+      (drawing.value || _.last(messages.value).role === 'user' || _.last(messages.value).thinking)
   }
 })
 </script>
@@ -28,7 +25,7 @@ const isThinking = computed({
   <div class="chat-input">
     <input @keyup.enter="sendMessage" type="text" :placeholder="isThinking ? 'AI思考中...' : '说点啥...'" v-model="message" :disabled="isThinking" />
     <button @click="sendMessage" v-if="!isThinking">发送</button>
-    <button @click="draw" v-if="role.draw && _.last(messages).role === 'assistant' && !_.last(messages).thinking">画图</button>
+    <button @click="draw" v-if="!drawing && role.draw && messages.length > 0 && _.last(messages).role === 'assistant' && !_.last(messages).thinking">画图</button>
   </div>
 </template>
 

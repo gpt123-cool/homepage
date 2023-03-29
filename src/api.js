@@ -43,3 +43,27 @@ export async function completions(content) {
     messages.value.push({ role: 'assistant', error: true, content: '请求错误，检查API KEY是否正确，以及是否还有访问限额。' })
   }
 }
+
+export const drawing = ref(false)
+
+export async function draw() {
+  try {
+    drawing.value = true
+    const msg = [_.last(messages.value), { role: 'user', content: '翻译成英文' }]
+    const resp = await fetch('https://gpt123.cool/v1/chat/completions', {
+      method: 'POST',
+      body: JSON.stringify({ model: 'gpt-3.5-turbo', temperature: 0.6, messages: msg }),
+      headers: {
+        'Authorization': `Bearer ${openaiApiKey.value.trim()}`,
+        'Content-Type': 'application/json'
+      }
+    })
+
+    const { choices: [{ message: { content } }] } = await resp.json()
+    console.log(content)
+  } catch (e) {
+    console.error(e)
+  } finally {
+    drawing.value = false
+  }
+}
