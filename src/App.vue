@@ -1,6 +1,6 @@
 <script setup>
 import _ from 'lodash'
-import { ref, watch } from 'vue'
+import { ref } from 'vue'
 
 import { openaiApiKey } from './settings'
 import { messages } from './api'
@@ -9,13 +9,6 @@ import ChatInput from './components/ChatInput.vue'
 import Messages from './components/Messages.vue'
 
 const showSettings = ref(!openaiApiKey.value)
-const bottom = ref()
-
-// function scroll() {
-//   setTimeout(() => bottom.value.scrollIntoView(), 100)
-// }
-
-// watch(() => messages.value.length > 0 && (_.last(messages.value).thinking + _.last(messages.value).content.length), scroll)
 </script>
 
 <template>
@@ -25,6 +18,7 @@ const bottom = ref()
     <span class="ph">123</span>
     <span class="cool">Cool</span>
     <div style="flex-grow: 1;"></div>
+    <a><font-awesome-icon icon="fa-solid fa-trash" @click="messages = []" /></a>
     <a :class="{ active: showSettings }"><font-awesome-icon icon="fa-solid fa-gear" @click="showSettings = !showSettings" /></a>
   </div>
   <settings v-if="showSettings" @SETTINGS_OK="showSettings = false" />
