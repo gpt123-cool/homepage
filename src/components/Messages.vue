@@ -1,11 +1,15 @@
 <script setup>
-import Markdown from 'vue3-markdown-it';
+import Markdown from 'vue3-markdown-it'
+import { ref, watch } from 'vue'
 
 import { messages } from '../api'
+
+const el = ref()
+watch(() => messages.value.length, () => setTimeout(() => el.value.scrollTop = el.value.scrollHeight, 100))
 </script>
 
 <template>
-<div class="messages">
+<div class="messages" ref="el">
   <div v-for="msg of messages" :class="{ row: true, user: msg.role === 'user', error: msg.error }">
     <div class="avatar bot"><img v-if="msg.role === 'assistant'" src="../assets/bot.svg" /></div>
     <markdown class="content" :source="msg.content"></markdown>
