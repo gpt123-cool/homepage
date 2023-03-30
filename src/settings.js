@@ -4,7 +4,7 @@ const roles = [{
   name: '-'
 }, {
   name: '作图',
-  message: '将我说的话转换成对一幅图像的描述',
+  message: '将我说的话转换成对一幅图像的描述，只回复描述即可',
   draw: true
 }, {
   name: '成语接龙',
