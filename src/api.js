@@ -46,6 +46,61 @@ export async function completions(content) {
 
 export const drawing = ref(false)
 
+async function getMessageByContent(content) {
+  const resp = await fetch('https://gpt123.cool/api/v9/channels/1086185404337762377/messages?limit=10')
+  const messages = await resp.json()
+  return messages.find(m => m.content.startsWith(`**${content}`))
+}
+
+async function sendToMj(content) {
+  const resp = await fetch('https://gpt123.cool/api/v9/interactions', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      type: 2,
+      application_id: '936929561302675456',
+      guild_id: '1086185404337762374',
+      channel_id: '1086185404337762377',
+      session_id: '2c1275dcd35e14f4d57c30c1fe2bdd31',
+      data: {
+        version: '1077969938624553050',
+        id: '938956540159881230',
+        name: 'imagine',
+        'type': 1,
+        options: [{ type: 3, name: 'prompt', value: content }],
+        application_command:{
+          id: '938956540159881230',
+          application_id: '936929561302675456',
+          version: '1077969938624553050',
+          default_permission: true,
+          default_member_permissions: null,
+          type: 1,
+          nsfw:false,
+          name: 'imagine',
+          description: 'Create images with Midjourney',
+          dm_permission: true,
+          options: [{ type: 3, name: 'prompt', description: 'The prompt to imagine', required: true }]},
+          attachments:[]
+        },
+        // nonce: '1090892875765383168'
+        nonce: `${Date.now()}`
+      })
+  })
+}
+
+async function setMessage(msg) {
+  const { id, content, attachments: [{ url }] } = msg
+  const message = { id, done: msg.components.length > 0, role: 'mj', content: `${content.replace(/\<\@\d+\>/g, '')}
+    ![${content}](${url.replace('cdn.discordapp.com', 'gpt123.cool')} "${content}")
+  `}
+
+  const lm = _.last(messages.value)
+  if (lm.role === 'mj' && !lm.done) messages.value.pop()
+  messages.value.push(message)
+}
+
 export async function draw() {
   try {
     drawing.value = true
@@ -60,9 +115,20 @@ export async function draw() {
     })
 
     const { choices: [{ message: { content } }] } = await resp.json()
-    console.log(content)
+    const existingMsg = await getMessageByContent(content)
+    if (existingMsg) {
+      setMessage(existingMsg)
+    } else {
+      await sendToMj(content)
+      let msg
+      do {
+        await new Promise(r => setTimeout(r, 5000))
+        msg = await getMessageByContent(content)
+        msg && msg.attachments.length > 0 && setMessage(msg)
+      } while(msg && msg.components.length === 0)
+    }
   } catch (e) {
-    console.error(e)
+    messages.push({ role: 'mj', error: true, content: '画图请求失败' })
   } finally {
     drawing.value = false
   }

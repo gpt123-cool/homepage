@@ -26,6 +26,7 @@ const isThinking = computed({
     <input @keyup.enter="sendMessage" type="text" :placeholder="isThinking ? 'AI思考中...' : '说点啥...'" v-model="message" :disabled="isThinking" />
     <button @click="sendMessage" v-if="!isThinking">发送</button>
     <button @click="draw" v-if="!drawing && role.draw && messages.length > 0 && _.last(messages).role === 'assistant' && !_.last(messages).thinking">画图</button>
+    <!-- <button @click="draw" v-if="!drawing">画图</button> -->
   </div>
 </template>
 
