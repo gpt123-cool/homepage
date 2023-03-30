@@ -91,10 +91,10 @@ async function sendToMj(content) {
 }
 
 async function setMessage(msg) {
-  const { id, content, attachments: [{ url }] } = msg
-  const message = { id, done: msg.components.length > 0, role: 'mj', content: `${content.replace(/\<\@\d+\>/g, '')}
+  const { id, content, attachments: [{ url } = {}] } = msg
+  const message = { id, done: msg.components.length > 0, role: 'mj', content: url ? `${content.replace(/\<\@\d+\>/g, '')}
     ![${content}](${url.replace('cdn.discordapp.com', 'gpt123.cool')} "${content}")
-  `}
+  ` : content}
 
   const lm = _.last(messages.value)
   if (lm.role === 'mj' && !lm.done) messages.value.pop()
@@ -124,7 +124,7 @@ export async function draw() {
       do {
         await new Promise(r => setTimeout(r, 5000))
         msg = await getMessageByContent(content)
-        msg && msg.attachments.length > 0 && setMessage(msg)
+        msg && setMessage(msg)
       } while(msg && msg.components.length === 0)
     }
   } catch (e) {
