@@ -18,7 +18,7 @@ const showSettings = ref(!openaiApiKey.value)
     <span class="ph">123</span>
     <span class="cool">Cool</span>
     <div style="flex-grow: 1;"></div>
-    <div>模式: {{ role.name }}</div>
+    <!-- <div>模式: {{ role.name }}</div> -->
     <a><font-awesome-icon icon="fa-solid fa-trash" @click="messages = []" /></a>
     <a :class="{ active: showSettings }"><font-awesome-icon icon="fa-solid fa-gear" @click="showSettings = !showSettings" /></a>
   </div>

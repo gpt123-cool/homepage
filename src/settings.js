@@ -1,4 +1,5 @@
 import { ref, watch } from 'vue'
+import { messages } from './api'
 
 const roles = [{
   name: '-'
@@ -16,5 +17,8 @@ const openaiApiKey = ref(localStorage.getItem(LSK))
 watch(openaiApiKey, v => localStorage.setItem(LSK, v.trim()))
 
 const role = ref(roles[0])
+watch(role, r => {
+  messages.value.push({ role: 'mode', content: '模式: ' + r.name })
+})
 
 export { roles, role, openaiApiKey }

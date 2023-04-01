@@ -10,10 +10,10 @@ watch(() => messages.value.length, () => setTimeout(() => el.value.scrollTop = e
 
 <template>
 <div class="messages" ref="el">
-  <div v-for="msg of messages" :class="{ row: true, user: msg.role === 'user', error: msg.error }">
+  <div v-for="msg of messages" :class="{ row: true, user: msg.role === 'user' || msg.role === 'mode', error: msg.error }">
     <div class="avatar bot"><img v-if="msg.role === 'assistant' || msg.role === 'mj'" src="../assets/bot.svg" /></div>
     <markdown class="content" :source="msg.content"></markdown>
-    <div class="avatar" v-if="msg.role === 'user'"><font-awesome-icon icon="fa-solid fa-user" /></div>
+    <div class="avatar" v-if="msg.role === 'user' || msg.role === 'mode'"><font-awesome-icon icon="fa-solid fa-user" /></div>
   </div>
 </div>
 </template>
@@ -46,7 +46,7 @@ watch(() => messages.value.length, () => setTimeout(() => el.value.scrollTop = e
     background-color: #94A3B826;
     overflow-x: hidden;
 
-    ::v-deep img {
+    :deep(img) {
       max-width: 100%;
       display: block;
     }
