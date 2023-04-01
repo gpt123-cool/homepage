@@ -104,7 +104,7 @@ async function setMessage(msg) {
 export async function draw() {
   try {
     drawing.value = true
-    const msg = [_.last(messages.value), { role: 'user', content: '翻译成英文' }]
+    const msg = [{ role: 'system', content: '翻译成英文' }, _.last(messages.value)]
     const resp = await fetch('https://gpt123.cool/v1/chat/completions', {
       method: 'POST',
       body: JSON.stringify({ model: 'gpt-3.5-turbo', temperature: 0.6, messages: msg }),
@@ -120,15 +120,18 @@ export async function draw() {
       setMessage(existingMsg)
     } else {
       await sendToMj(content)
-      let msg
+      let tries = 0, msg
       do {
         await new Promise(r => setTimeout(r, 5000))
         msg = await getMessageByContent(content)
         msg && setMessage(msg)
-      } while(msg && msg.components.length === 0)
+        if (!msg && tries++ > 4) {
+          throw new Error('MJ Request Error.')
+        }
+      } while(!msg || msg.components.length === 0)
     }
   } catch (e) {
-    messages.push({ role: 'mj', error: true, content: '画图请求失败' })
+    messages.value.push({ role: 'mj', error: true, content: '画图请求失败' })
   } finally {
     drawing.value = false
   }
