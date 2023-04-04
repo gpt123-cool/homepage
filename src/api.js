@@ -104,7 +104,7 @@ async function setMessage(msg) {
 export async function draw() {
   try {
     drawing.value = true
-    const msg = [{ role: 'system', content: '翻译成英文' }, _.last(messages.value)]
+    const msg = [{ role: 'system', content: '将我的话翻译成英文' }, _.last(messages.value)]
     msg[1].content = _.last(msg[1].content.split('\n'))
     const resp = await fetch('https://gpt123.cool/v1/chat/completions', {
       method: 'POST',
