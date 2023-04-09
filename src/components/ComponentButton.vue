@@ -86,6 +86,11 @@ async function handelClick(u) {
   color: white;
 }
 
+button {
+  font-family: monospace;
+  font-size: large;
+}
+
 button:disabled {
   color: #475569;
 }
