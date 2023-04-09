@@ -3,7 +3,7 @@ import Markdown from 'vue3-markdown-it'
 import { ref, watch } from 'vue'
 
 import { messages } from '../api'
-import UpscaleButton from './UpscaleButton.vue'
+import ComponentButton from './ComponentButton.vue'
 const el = ref()
 function scrollToBottom() { el.value.scrollTop = el.value.scrollHeight }
 watch(() => messages.value.length, () => setTimeout(scrollToBottom, 100))
@@ -19,7 +19,10 @@ watch(() => messages.value.length, () => setTimeout(scrollToBottom, 100))
         <img @load="scrollToBottom" :src="u.attachments[0].url.replace('cdn.discordapp.com', 'gpt123.cool')" />
       </div>
       <div v-if="msg.role === 'mj' && msg.done" class="upscale">
-        <upscale-button v-for="c of msg.components[0].components.slice(0, 4)" :up="{ id: msg.id, ...c }" />
+        <component-button v-for="c of msg.components[0].components.slice(0, 4)" :up="{ id: msg.id, ...c }" />
+      </div>
+      <div v-if="msg.role === 'mj' && msg.done" class="upscale">
+        <component-button v-for="c of msg.components[1].components" :up="{ id: msg.id, ...c }" />
       </div>
     </div>
     <div class="avatar" v-if="msg.role === 'user' || msg.role === 'mode'"><font-awesome-icon icon="fa-solid fa-user" /></div>
