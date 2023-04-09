@@ -2,7 +2,7 @@ import _ from 'lodash'
 import { fetchEventSource } from '@microsoft/fetch-event-source'
 import { ref } from 'vue'
 
-import { openaiApiKey, role } from './settings'
+import { openaiApiKey, role, ar } from './settings'
 
 export const messages = ref([])
 
@@ -130,7 +130,7 @@ export async function draw() {
     if (existingMsg) {
       setMessage(existingMsg)
     } else {
-      await sendToMj(content)
+      await sendToMj(content + ar.value.value)
       let tries = 0, msg
       do {
         await new Promise(r => setTimeout(r, 5000))

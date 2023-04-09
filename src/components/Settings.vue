@@ -1,5 +1,5 @@
 <script setup>
-import { openaiApiKey, roles, role  } from '../settings'
+import { openaiApiKey, roles, role, ars, ar  } from '../settings'
 </script>
 
 <template>
@@ -13,6 +13,9 @@ import { openaiApiKey, roles, role  } from '../settings'
     <select v-model="role">
       <option v-for="r of roles" :value="r">{{ r.name }}</option>
     </select>
+    <select v-if="role.draw" v-model="ar">
+      <option v-for="a of ars" :value="a">{{ a.name }}</option>
+    </select>
   </div>
 </div>
 </template>
@@ -25,7 +28,10 @@ import { openaiApiKey, roles, role  } from '../settings'
     align-items: center;
 
     select {
-      width: 100%;
+      flex-grow: 1;
+      appearance: none;
+      background-color: #94A3B826;
+      border: 1px solid #94A3B826;
       padding: 10px;
     }
   }

@@ -9,12 +9,29 @@ const roles = [{
   draw: true
 }, {
   name: '作图-英文',
-  message: '将我说的话转换成对一幅图像的描述并将描述翻译英文（注意：只回复描述）',
+  message: '将我说的话转换成对一幅图像的描述，并将生成的描述翻译英文（注意：只回复描述）',
   draw: true,
   english: true
 }, {
   name: '成语接龙',
   message: '我们来玩四字成语接龙，你回复的成语的第一个字要是我说的成语的最后一个字'
+}]
+
+const ars = [{
+  name: '1:1',
+  value: ''
+}, {
+  name: '9:16',
+  value: ' --ar 9:16'
+}, {
+  name: '16:9',
+  value: ' --ar 16:9'
+}, {
+  name: '4:3',
+  value: ' --ar 4:3'
+}, {
+  name: '3:4',
+  value: ' --ar 3:4'
 }]
 
 const LSK = 'OPENAI_API_KEY'
@@ -26,4 +43,6 @@ watch(role, r => {
   messages.value.push({ role: 'mode', content: '模式: ' + r.name })
 })
 
-export { roles, role, openaiApiKey }
+const ar = ref(ars[0])
+
+export { roles, role, ars, ar, openaiApiKey }
