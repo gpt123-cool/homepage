@@ -33,10 +33,10 @@ const ars = [{
   name: '3:4',
   value: ' --v 5 --ar 3:4'
 }, {
-  name: '9:16 (高清)',
+  name: '9:16 v4',
   value: ' --upbeta --ar 9:16'
 }, {
-  name: '16:9 (高清)',
+  name: '16:9 v4',
   value: ' --upbeta --ar 16:9'
 }]
 
