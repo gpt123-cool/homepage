@@ -7,7 +7,7 @@ defineProps({
 
 async function updateMessageById(id, isUpscale) {
   const msg = messages.value.find(m => m.id === id)
-  const resp = await fetch('https://gpt123.cool/api/v9/channels/1086185404337762377/messages?limit=10')
+  const resp = await fetch('https://gpt123.cool/api/v9/channels/1086185404337762377/messages?limit=25')
   const messagesResp = await resp.json()
   const msgResp = messagesResp.find(m => m.id === id)
   msg.components = msgResp.components

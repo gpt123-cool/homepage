@@ -47,7 +47,7 @@ export async function completions(content) {
 export const drawing = ref(false)
 
 async function getMessageByContent(content) {
-  const resp = await fetch('https://gpt123.cool/api/v9/channels/1086185404337762377/messages?limit=10')
+  const resp = await fetch('https://gpt123.cool/api/v9/channels/1086185404337762377/messages?limit=25')
   const messages = await resp.json()
   return messages.find(m => m.content.startsWith(`**${content}`))
 }
