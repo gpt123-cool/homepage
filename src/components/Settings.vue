@@ -8,8 +8,9 @@ import { openaiApiKey, roles, role, ars, ar  } from '../settings'
     <input type="text" placeholder="OPENAI API KEY" v-model="openaiApiKey" />
     <button @click="$emit('SETTINGS_OK')">OK</button>
   </div>
-  <p>API_KEY只被保存于浏览器的localStorage中，不会被服务器保存。</p>
+  <p>API_KEY只存在浏览器localStorage,服务器不会保存</p>
   <div class="row">
+    <div>模式：</div>
     <select v-model="role">
       <option v-for="r of roles" :value="r">{{ r.name }}</option>
     </select>
@@ -17,6 +18,9 @@ import { openaiApiKey, roles, role, ars, ar  } from '../settings'
       <option v-for="a of ars" :value="a">{{ a.name }}</option>
     </select>
   </div>
+
+  <p>API_KEY获取地址<a href="https://platform.openai.com/account/api-keys">https://platform.openai.com/account/api-keys</a></p>
+  <p>也可通过淘宝/闲鱼购买</p>
 </div>
 </template>
 
