@@ -94,7 +94,7 @@ async function setMessage(msg) {
   const { id, content, attachments: [{ url } = {}] } = msg
   const message = { id, done: msg.components.length > 0, role: 'mj', content: url ? `${content.replace(/\<\@\d+\>/g, '')}
     ![${content}](${url.replace('cdn.discordapp.com', 'gpt123.cool')} "${content}")
-  ` : content}
+  ` : content, components: msg.components }
 
   const lm = _.last(messages.value)
   if (lm.role === 'mj' && !lm.done) messages.value.pop()
