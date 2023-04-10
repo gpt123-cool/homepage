@@ -12,6 +12,7 @@ export async function completions(content) {
     const messagesToSend = messages.value.filter(m => !m.error && (m.role === 'user' || m.role === 'assistant')).slice(-10)
     if (role.value.message) messagesToSend.unshift({ role: 'system', content: role.value.message })
 
+    let messageResponse
     await fetchEventSource(
       'https://gpt123.cool/v1/chat/completions',
       {
@@ -25,13 +26,19 @@ export async function completions(content) {
         onmessage(msg) {
           const { data } = msg
           if (data === '[DONE]') {
-            delete _.last(messages.value).thinking
+            delete messageResponse.thinking
           } else {
-            const { choices: [{ delta }] } = JSON.parse(data)
-            if (delta.role) {
-              messages.value.push({ ...delta, content: '', thinking: true })
-            } else if (delta.content) {
-              _.last(messages.value).content += delta.content
+            const { choices: [{ delta: { role, content } }] } = JSON.parse(data)
+            if (role) {
+              if (messageResponse) {
+                messageResponse.content = content || ''
+                messageResponse.thinking = true
+              } else {
+                messages.value.push({ role, content: content || '', thinking: true })
+                messageResponse = _.last(messages.value)
+              }
+            } else if (content) {
+              messageResponse.content += content
             }
           }
         }
