@@ -1,5 +1,5 @@
 <script setup>
-import { drawing, messages } from '../api'
+import { drawing, messages, mjToMessage } from '../api'
 
 defineProps({
   up: Object
@@ -23,12 +23,13 @@ async function updateMessageById(id, isUpscale) {
   } else {
     const variations = messagesResp.filter(({ content, attachments: [{ url } = {}], message_reference: { message_id } = {} }) => content.indexOf('Variations') >= 0 && url && message_id === id)
     if (variations.length > 0) {
-      const { id: rid, components, content, attachments: [{ url } = {}] = [], message_reference: { message_id } = {} } = variations.find(v => !messages.value.find(m => m.id === v.id)) || {}
+      const { id: rid, components, content, attachments: [{ url, width, height } = {}] = [], message_reference: { message_id } = {} } = variations.find(v => !messages.value.find(m => m.id === v.id)) || {}
       if (rid) {
-        messages.value.push({ id: rid, done: true, role: 'mj', referenceMessageId: message_id, components, content: `
-${content.replace(/\<\@\d+\>/g, '')}
-![${content}](${url.replace('cdn.discordapp.com', 'gpt123.cool')} "${content}")
-        `})
+        messages.value.push(mjToMessage({ id: rid, referenceMessageId: id, components, content, attachments: [{ url, width, height }], message_reference: { message_id } }))
+        console.log(
+          msg.components[1].components.filter(c => c.style === 1).length,
+          messages.value.filter(c => c.referenceMessageId === id).length
+        )
         return msg.components[1].components.filter(c => c.style === 1).length !== messages.value.filter(c => c.referenceMessageId === id).length
       } else {
         return true

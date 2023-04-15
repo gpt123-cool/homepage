@@ -97,12 +97,16 @@ async function sendToMj(content) {
   })
 }
 
-async function setMessage(msg) {
-  const { id, content, attachments: [{ url } = {}] } = msg
-  const message = { id, done: msg.components.length > 0, role: 'mj', content: url ? `${content.replace(/\<\@\d+\>/g, '')}
-    ![${content}](${url.replace('cdn.discordapp.com', 'gpt123.cool')} "${content}")
+export function mjToMessage(msg) {
+  const { id, referenceMessageId, content, attachments: [{ url, width, height } = {}] } = msg
+  const sizeQuery = Math.max(width, height) > 1024 ? `?width=${width / 4}&height=${height / 4}` : ''
+  return { id, referenceMessageId, done: msg.components.length > 0, role: 'mj', content: url ? `${content.replace(/\<\@\d+\>/g, '')}
+    ![${content}](${url.replace('cdn.discordapp.com', 'gpt123.cool')}${sizeQuery} "${content}")
   ` : content, components: msg.components }
+}
 
+async function setMessage(msg) {
+  const message = mjToMessage(msg)
   const lm = _.last(messages.value)
   if (lm.role === 'mj' && !lm.done) messages.value.pop()
   messages.value.push(message)
