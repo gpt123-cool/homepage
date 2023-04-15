@@ -16,7 +16,7 @@ watch(() => messages.value.length, () => setTimeout(scrollToBottom, 100))
     <div class="content">
       <markdown :source="msg.content"></markdown>
       <div v-for="u of msg.upscales" class="upscaled">
-        <img @load="scrollToBottom" :src="u.attachments[0].url.replace('cdn.discordapp.com', 'gpt123.cool')" />
+        <img :src="u.attachments[0].url.replace('cdn.discordapp.com', 'gpt123.cool')" />
       </div>
       <div v-if="msg.role === 'mj' && msg.done" class="upscale">
         <component-button v-for="c of msg.components[0].components" :up="{ id: msg.id, ...c }" />
