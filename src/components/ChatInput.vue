@@ -10,7 +10,12 @@ const emit = defineEmits()
 async function sendMessage() {
   const msg = message.value
   message.value = ''
-  await completions(msg)
+  const { exec } = role.value
+  if (exec) {
+    await eval(exec)(msg)
+  } else {
+    await completions(msg)
+  }
 }
 
 const isThinking = computed({

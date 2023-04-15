@@ -15,6 +15,11 @@ const roles = [{
 }, {
   name: '成语接龙',
   message: '我们来玩四字成语接龙，你回复的成语的第一个字要是我说的成语的最后一个字'
+}, {
+  name: 'Midjourney',
+  english: true,
+  draw: true,
+  exec: '(content) => draw(content)'
 }]
 
 const ars = [{

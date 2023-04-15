@@ -108,29 +108,30 @@ async function setMessage(msg) {
   messages.value.push(message)
 }
 
-export async function draw() {
+export async function draw(content) {
   try {
     drawing.value = true
-    let content
 
-    if (role.value.english) {
-      content = _.last(_.last(messages.value).content.split('\n'))
-      content = content.replace('英文翻译：', '')
-      content = content.replace(/I am sorry, as an AI language model, I cannot draw images. However, I can provide you with a textual description of an image of.*?\./, '')
-    } else {
-      const msg = [{ role: 'system', content: '将我的话翻译成英文' }, _.last(messages.value)]
-      msg[1].content = _.last(msg[1].content.split('\n'))
-      const resp = await fetch('https://gpt123.cool/v1/chat/completions', {
-        method: 'POST',
-        body: JSON.stringify({ model: 'gpt-3.5-turbo', temperature: 0.6, messages: msg }),
-        headers: {
-          'Authorization': `Bearer ${openaiApiKey.value.trim()}`,
-          'Content-Type': 'application/json'
-        }
-      })
+    if (!content) {
+      if (role.value.english) {
+        content = _.last(_.last(messages.value).content.split('\n'))
+        content = content.replace('英文翻译：', '')
+        content = content.replace(/I am sorry, as an AI language model, I cannot draw images. However, I can provide you with a textual description of an image of.*?\./, '')
+      } else {
+        const msg = [{ role: 'system', content: '将我的话翻译成英文' }, _.last(messages.value)]
+        msg[1].content = _.last(msg[1].content.split('\n'))
+        const resp = await fetch('https://gpt123.cool/v1/chat/completions', {
+          method: 'POST',
+          body: JSON.stringify({ model: 'gpt-3.5-turbo', temperature: 0.6, messages: msg }),
+          headers: {
+            'Authorization': `Bearer ${openaiApiKey.value.trim()}`,
+            'Content-Type': 'application/json'
+          }
+        })
 
-      const { choices: [{ message: { content: c } }] } = await resp.json()
-      content = c
+        const { choices: [{ message: { content: c } }] } = await resp.json()
+        content = c
+      }
     }
 
     const existingMsg = await getMessageByContent(content)
