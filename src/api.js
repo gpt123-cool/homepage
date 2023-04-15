@@ -53,10 +53,12 @@ export async function completions(content) {
 
 export const drawing = ref(false)
 
-async function getMessageByContent(content) {
+async function getMessageByContent(c, ts) {
   const resp = await fetch('https://gpt123.cool/api/v9/channels/1086185404337762377/messages?limit=25')
   const messages = await resp.json()
-  return messages.find(m => m.content.startsWith(`**${content}`))
+  return messages.find(({ content, timestamp, message_reference: { message_id } = {} }) =>
+    !message_id && Date.parse(timestamp) > ts && content.startsWith(`**${c}`)
+  )
 }
 
 async function sendToMj(content) {
@@ -98,11 +100,14 @@ async function sendToMj(content) {
 }
 
 export function mjToMessage(msg) {
-  const { id, referenceMessageId, content, attachments: [{ url, width, height } = {}] } = msg
+  const { id, referenceMessageId, components = [], content, attachments: [{ url, width, height } = {}] } = msg
+  if (components.length === 2 && components[0].components.length === 5) {
+    components[1].components.push(components[0].components.pop())
+  }
   const sizeQuery = Math.max(width, height) > 1024 ? `?width=${width / 4}&height=${height / 4}` : ''
   return { id, referenceMessageId, done: msg.components.length > 0, role: 'mj', content: url ? `${content.replace(/\<\@\d+\>/g, '')}
     ![${content}](${url.replace('cdn.discordapp.com', 'gpt123.cool')}${sizeQuery} "${content}")
-  ` : content, components: msg.components }
+  ` : content, components }
 }
 
 async function setMessage(msg) {
@@ -116,7 +121,7 @@ export async function draw(content) {
   try {
     drawing.value = true
 
-    if (!content) {
+    if (!content || typeof content !== 'string') {
       if (role.value.english) {
         content = _.last(_.last(messages.value).content.split('\n'))
         content = content.replace('英文翻译：', '')
@@ -138,7 +143,8 @@ export async function draw(content) {
       }
     }
 
-    const existingMsg = await getMessageByContent(content)
+    const now = Date.now()
+    const existingMsg = await getMessageByContent(content, now)
     if (existingMsg) {
       setMessage(existingMsg)
     } else {
@@ -146,7 +152,7 @@ export async function draw(content) {
       let tries = 0, msg
       do {
         await new Promise(r => setTimeout(r, 5000))
-        msg = await getMessageByContent(content)
+        msg = await getMessageByContent(content, now)
         msg && setMessage(msg)
         if (!msg && tries++ > 4) {
           throw new Error('MJ Request Error.')

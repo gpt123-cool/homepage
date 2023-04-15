@@ -19,7 +19,7 @@ watch(() => messages.value.length, () => setTimeout(scrollToBottom, 100))
         <img @load="scrollToBottom" :src="u.attachments[0].url.replace('cdn.discordapp.com', 'gpt123.cool')" />
       </div>
       <div v-if="msg.role === 'mj' && msg.done" class="upscale">
-        <component-button v-for="c of msg.components[0].components.slice(0, 4)" :up="{ id: msg.id, ...c }" />
+        <component-button v-for="c of msg.components[0].components" :up="{ id: msg.id, ...c }" />
       </div>
       <div v-if="msg.role === 'mj' && msg.done" class="upscale">
         <component-button v-for="c of msg.components[1].components" :up="{ id: msg.id, ...c }" />

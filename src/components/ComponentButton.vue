@@ -10,10 +10,16 @@ async function updateMessageById(id, isUpscale) {
   const resp = await fetch('https://gpt123.cool/api/v9/channels/1086185404337762377/messages?limit=25')
   const messagesResp = await resp.json()
   const msgResp = messagesResp.find(m => m.id === id)
-  msg.components = msgResp.components
+  // msg.components = msgResp.components
+  Object.assign(msg, mjToMessage(msgResp))
 
+  // const now = Date.now()
   if (isUpscale) {
-    const upscales = messagesResp.filter(({ content, attachments: [{ url } = {}], message_reference: { message_id } = {} }) => content.indexOf('Variations') < 0 && url && message_id === id)
+    const upscales = messagesResp.filter(({ components = [], attachments: [{ url } = {}], message_reference: { message_id } = {} }) =>
+      // content.indexOf('Variations') < 0 &&
+      components.length > 0 && components[0].components.length < 5 &&
+      url && message_id === id
+    )
     if (upscales.length > 0) {
       msg.upscales = upscales.reverse()
       return msg.components[0].components.filter(c => c.style === 1).length !== msg.upscales.length
@@ -21,17 +27,23 @@ async function updateMessageById(id, isUpscale) {
       return true
     }
   } else {
-    const variations = messagesResp.filter(({ content, attachments: [{ url } = {}], message_reference: { message_id } = {} }) => content.indexOf('Variations') >= 0 && url && message_id === id)
+    const variations = messagesResp.filter(({ components = [], attachments: [{ url } = {}], message_reference: { message_id } = {} }) =>
+      // content.indexOf('Variations') >= 0
+      components.length === 2 && components[0].components.length === 5 && components[1].components.length === 4 &&
+      url && message_id === id
+    )
     if (variations.length > 0) {
       const { id: rid, components, content, attachments: [{ url, width, height } = {}] = [], message_reference: { message_id } = {} } = variations.find(v => !messages.value.find(m => m.id === v.id)) || {}
       if (rid) {
+        messages.value = messages.value.filter(({ referenceMessageId, done }) => referenceMessageId !== id || done)
         messages.value.push(mjToMessage({ id: rid, referenceMessageId: id, components, content, attachments: [{ url, width, height }], message_reference: { message_id } }))
-        console.log(
-          msg.components[1].components.filter(c => c.style === 1).length,
-          messages.value.filter(c => c.referenceMessageId === id).length
-        )
         return msg.components[1].components.filter(c => c.style === 1).length !== messages.value.filter(c => c.referenceMessageId === id).length
       } else {
+        variations.forEach(msg => {
+          const oldMsg = messages.value.find(m => m.id === msg.id)
+          const { referenceMessageId } = oldMsg
+          if (oldMsg) Object.assign(oldMsg, { ... mjToMessage(msg), referenceMessageId })
+        });
         return true
       }
     } else {
@@ -69,7 +81,7 @@ async function handelClick(u) {
 
       do {
         await new Promise(resolve => setTimeout(resolve, 5000))
-      } while(await updateMessageById(u.id, u.label.startsWith('U')))
+      } while(await updateMessageById(u.id, u.label && u.label.startsWith('U')))
     } finally {
       drawing.value = false
     }
@@ -78,7 +90,7 @@ async function handelClick(u) {
 </script>
 
 <template>
-<button :disabled="drawing" @click="() => handelClick(up)" :class="{ active: up.style === 1 }">{{ up.label }}</button>
+<button :disabled="drawing" @click="() => handelClick(up)" :class="{ active: up.style === 1 }">{{ up.label || up.emoji.name }}</button>
 </template>
 
 <style scoped>
