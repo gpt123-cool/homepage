@@ -9,7 +9,7 @@ const roles = [{
   draw: true
 }, {
   name: '作图-英文输出',
-  message: '我的话是一幅图像的大致内容，请补充细节，生成英文描述（注意：只回复描述）',
+  message: '我的话是一幅图像的大致内容，请补充细节，并用英文描述它（注意：只回复描述）',
   draw: true,
   english: true
 }, {
