@@ -123,7 +123,7 @@ export async function draw(content) {
 
     if (!content || typeof content !== 'string') {
       if (role.value.english) {
-        content = _.last(_.last(messages.value).content.split('\n'))
+        content = _.last(messages.value).content
         content = content.replace('英文翻译：', '')
         content = content.replace(/I am sorry, as an AI language model, I cannot draw images. However, I can provide you with a textual description of an image of.*?\./, '')
       } else {
@@ -141,6 +141,9 @@ export async function draw(content) {
         const { choices: [{ message: { content: c } }] } = await resp.json()
         content = c
       }
+
+      const lines = content.split('\n')
+      if (lines.length > 1) content = lines.filter(ln => ln).slice(1).join(' ')
     }
 
     const now = Date.now()
@@ -161,6 +164,7 @@ export async function draw(content) {
     }
   } catch (e) {
     messages.value.push({ role: 'mj', error: true, content: '画图请求失败' })
+    console.error(e)
   } finally {
     drawing.value = false
   }
