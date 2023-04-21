@@ -5,11 +5,11 @@ const roles = [{
   name: '-'
 }, {
   name: '作图',
-  message: '我的话是一幅图像的大致内容，请补充细节，生成描述（注意：只回复描述）',
+  message: '我的话是一幅图像的大致内容，请补充细节，生成AI绘画的prompt',
   draw: true
 }, {
   name: '作图-英文',
-  message: '我的话是一幅图像的大致内容，请补充细节，生成英文描述（注意：只回复描述）',
+  message: '我的话是一幅图像的大致内容，请补充细节，用英文描述一幅AI绘画的prompt',
   draw: true,
   english: true
 }, {
