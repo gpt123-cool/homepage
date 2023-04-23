@@ -53,11 +53,11 @@ export async function completions(content) {
 
 export const drawing = ref(false)
 
-async function getMessageByContent(c, ts) {
+async function getMessageBySeed(seed) {
   const resp = await fetch('https://gpt123.cool/api/v9/channels/1086185404337762377/messages?limit=25')
   const messages = await resp.json()
-  return messages.find(({ content, timestamp, message_reference: { message_id } = {} }) =>
-    !message_id && Date.parse(timestamp) > ts && content.startsWith(`**${c}`)
+  return messages.find(({ content, message_reference: { message_id } = {} }) =>
+    !message_id && content.indexOf(seed) > 0
   )
 }
 
@@ -77,7 +77,7 @@ async function sendToMj(content) {
         version: '1077969938624553050',
         id: '938956540159881230',
         name: 'imagine',
-        'type': 1,
+        type: 1,
         options: [{ type: 3, name: 'prompt', value: content }],
         application_command:{
           id: '938956540159881230',
@@ -86,7 +86,7 @@ async function sendToMj(content) {
           default_permission: true,
           default_member_permissions: null,
           type: 1,
-          nsfw:false,
+          nsfw: false,
           name: 'imagine',
           description: 'Create images with Midjourney',
           dm_permission: true,
@@ -146,22 +146,23 @@ export async function draw(content) {
       if (lines.length > 1) content = lines.filter(ln => ln).slice(1).join(' ')
     }
 
-    const now = Date.now()
-    const existingMsg = await getMessageByContent(content, now)
-    if (existingMsg) {
-      setMessage(existingMsg)
-    } else {
-      await sendToMj(content + ar.value.value)
+    // const now = Date.now()
+    // const existingMsg = await getMessageByContent(content, now)
+    // if (existingMsg) {
+    //   setMessage(existingMsg)
+    // } else {
+      const seed = ` --seed ${Math.floor(Math.random() * 2 ** 32)}`
+      await sendToMj(content + ar.value.value + seed)
       let tries = 0, msg
       do {
         await new Promise(r => setTimeout(r, 5000))
-        msg = await getMessageByContent(content, now)
+        msg = await getMessageBySeed(seed)
         msg && setMessage(msg)
         if (!msg && tries++ > 4) {
           throw new Error('MJ Request Error.')
         }
       } while(!msg || msg.components.length === 0)
-    }
+    // }
   } catch (e) {
     messages.value.push({ role: 'mj', error: true, content: '画图请求失败' })
     console.error(e)
