@@ -24,25 +24,25 @@ const roles = [{
 
 const ars = [{
   name: '1:1',
-  value: ' --v 5'
+  value: ''
 }, {
   name: '9:16',
-  value: ' --v 5 --ar 9:16'
+  value: ' --ar 9:16'
 }, {
   name: '16:9',
-  value: ' --v 5 --ar 16:9'
+  value: ' --ar 16:9'
 }, {
   name: '4:3',
-  value: ' --v 5 --ar 4:3'
+  value: ' --ar 4:3'
 }, {
   name: '3:4',
-  value: ' --v 5 --ar 3:4'
+  value: ' --ar 3:4'
 }, {
   name: '9:16 v4',
-  value: ' --upbeta --ar 9:16'
+  value: ' --v 4 --upbeta --ar 9:16'
 }, {
   name: '16:9 v4',
-  value: ' --upbeta --ar 16:9'
+  value: ' --v 4 --upbeta --ar 16:9'
 }]
 
 const LSK = 'OPENAI_API_KEY'
