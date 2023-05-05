@@ -106,7 +106,7 @@ export function mjToMessage(msg) {
   }
   const sizeQuery = Math.max(width, height) > 1024 ? `?width=${width / 4}&height=${height / 4}` : ''
   return { id, referenceMessageId, done: msg.components.length > 0, role: 'mj', content: url ? `${content.replace(/\<\@\d+\>/g, '')}
-    ![${content}](${url.replace('cdn.discordapp.com', 'gpt123.cool')}${sizeQuery} "${content}")
+    ![${content}](${url.replace('cdn.discordapp.com', 'gpt123.cool')}${sizeQuery})
   ` : content, components }
 }
 
