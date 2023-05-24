@@ -34,6 +34,7 @@ import { openaiApiKey, roles, role, ars, ar  } from '../settings'
     select {
       flex-grow: 1;
       appearance: none;
+      color: #94A3B8;
       background-color: #94A3B826;
       border: 1px solid #94A3B826;
       padding: 10px;
