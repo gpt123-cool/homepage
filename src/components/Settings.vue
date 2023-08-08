@@ -1,9 +1,12 @@
 <script setup>
-import { openaiApiKey, roles, role, ars, ar  } from '../settings'
+import { openaiApiKey, midjourneyToken, roles, role, ars, ar  } from '../settings'
 </script>
 
 <template>
 <div class="settings">
+  <div class="row">
+    <input type="text" placeholder="MIDJOURNEY TOKEN" v-model="midjourneyToken" />
+  </div>
   <div class="row">
     <input type="text" placeholder="OPENAI API KEY" v-model="openaiApiKey" />
     <button @click="$emit('SETTINGS_OK')">OK</button>

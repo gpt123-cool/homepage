@@ -1,8 +1,10 @@
 import _ from 'lodash'
 import { fetchEventSource } from '@microsoft/fetch-event-source'
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 
-import { openaiApiKey, role, ar } from './settings'
+import { Midjourney } from "midjourney"
+
+import { openaiApiKey, midjourneyToken, role, ar } from './settings'
 
 export const messages = ref([])
 
@@ -53,60 +55,74 @@ export async function completions(content) {
 
 export const drawing = ref(false)
 
-async function getMessageBySeed(seed) {
-  const resp = await fetch('https://gpt123.cool/api/v9/channels/1086185404337762377/messages?limit=25')
-  const messages = await resp.json()
-  return messages.find(({ content, message_reference: { message_id } = {} }) =>
-    !message_id && content.indexOf(seed) > 0
-  )
+let client
+function initMjClient() {
+  if (!midjourneyToken.value) return
+
+  client = new Midjourney({
+    ServerId: '1086185404337762374',
+    ChannelId: '1086185404337762377',
+    SalaiToken: midjourneyToken.value,
+    Debug: false,
+    Ws: true,
+    fetch: window.fetch.bind(window)
+  })
+  
+  client.init().catch(console.error)  
 }
 
-async function sendToMj(content) {
-  const resp = await fetch('https://gpt123.cool/api/v9/interactions', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({
-      type: 2,
-      application_id: '936929561302675456',
-      guild_id: '1086185404337762374',
-      channel_id: '1086185404337762377',
-      session_id: '2c1275dcd35e14f4d57c30c1fe2bdd31',
-      data: {
-        version: '1077969938624553050',
-        id: '938956540159881230',
-        name: 'imagine',
-        type: 1,
-        options: [{ type: 3, name: 'prompt', value: content }],
-        application_command:{
-          id: '938956540159881230',
-          application_id: '936929561302675456',
-          version: '1077969938624553050',
-          default_permission: true,
-          default_member_permissions: null,
-          type: 1,
-          nsfw: false,
-          name: 'imagine',
-          description: 'Create images with Midjourney',
-          dm_permission: true,
-          options: [{ type: 3, name: 'prompt', description: 'The prompt to imagine', required: true }]},
-          attachments:[]
-        },
-        // nonce: '1090892875765383168'
-        nonce: `${Date.now()}`
-      })
+setTimeout(() => {
+  watch(midjourneyToken, initMjClient)
+  initMjClient()
+}, 50)
+
+async function sendToMj(prompt) {
+  const imagine = await client.Imagine(
+    prompt,
+    (uri, progress) => {
+      setMessage({ uri, progress, content: `${progress} ${prompt}` })
+    }
+  )
+
+  setMessage(imagine)
+}
+
+export async function upscale({ id, flags = 0, custom }) {
+  const upscale = await client.Custom({
+    msgId: id,
+    flags,
+    customId: custom
   })
+
+  const msg = messages.value.find(m => m.id === id)
+  msg.upscales = [...msg.upscales || [], upscale]
+}
+
+export async function makeVariation({ id, flags = 0, custom }) {
+  const varitaion = await client.Custom({
+    msgId: id,
+    flags,
+    customId: custom,
+    loading: (uri, progress) => {
+      setMessage({ uri, progress, content: `${progress}` })
+    }
+  })
+
+  setMessage(varitaion)
 }
 
 export function mjToMessage(msg) {
-  const { id, referenceMessageId, components = [], content, attachments: [{ url, width, height } = {}] } = msg
-  if (components.length === 2 && components[0].components.length === 5) {
-    components[1].components.push(components[0].components.pop())
+  const { id, referenceMessageId, options = [], content, uri, width = 0, height = 0, progress } = msg
+
+  let components = []
+  if (options.length === 9) {
+    components.push(options.slice(0, 4))
+    components.push([...options.slice(5), options[4]])
   }
+
   const sizeQuery = Math.max(width, height) > 1024 ? `?width=${width / 4}&height=${height / 4}` : ''
-  return { id, referenceMessageId, done: msg.components.length > 0, role: 'mj', content: url ? `${content.replace(/\<\@\d+\>/g, '')}
-    ![${content}](${url.replace('cdn.discordapp.com', 'gpt123.cool')}${sizeQuery})
+  return { id, referenceMessageId, done: progress === 'done', role: 'mj', content: uri ? `${content.replace(/\<\@\d+\>/g, '')}
+    ![${content}](${uri.replace('cdn.discordapp.com', 'gpt123.cool')}${sizeQuery})
   ` : content, components }
 }
 
@@ -146,23 +162,7 @@ export async function draw(content) {
       if (lines.length > 1) content = lines.filter(ln => ln).slice(1).join(' ')
     }
 
-    // const now = Date.now()
-    // const existingMsg = await getMessageByContent(content, now)
-    // if (existingMsg) {
-    //   setMessage(existingMsg)
-    // } else {
-      const seed = ` --seed ${Math.floor(Math.random() * 2 ** 32)}`
-      await sendToMj(content + ar.value.value + seed)
-      let tries = 0, msg
-      do {
-        await new Promise(r => setTimeout(r, 5000))
-        msg = await getMessageBySeed(seed)
-        msg && setMessage(msg)
-        if (!msg && tries++ > 4) {
-          throw new Error('MJ Request Error.')
-        }
-      } while(!msg || msg.components.length === 0)
-    // }
+    await sendToMj(content + ar.value.value)
   } catch (e) {
     messages.value.push({ role: 'mj', error: true, content: '画图请求失败' })
     console.error(e)

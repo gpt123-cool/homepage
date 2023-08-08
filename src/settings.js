@@ -49,6 +49,10 @@ const LSK = 'OPENAI_API_KEY'
 const openaiApiKey = ref(localStorage.getItem(LSK))
 watch(openaiApiKey, v => localStorage.setItem(LSK, v.trim()))
 
+const MJK = 'MIDJOURNEY_TOKEN'
+const midjourneyToken = ref(localStorage.getItem(MJK))
+watch(midjourneyToken, v => localStorage.setItem(MJK, v.trim()))
+
 const role = ref(roles[0])
 watch(role, r => {
   messages.value.push({ role: 'mode', content: '模式: ' + r.name })
@@ -56,4 +60,4 @@ watch(role, r => {
 
 const ar = ref(ars[0])
 
-export { roles, role, ars, ar, openaiApiKey }
+export { roles, role, ars, ar, openaiApiKey, midjourneyToken }
