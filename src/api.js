@@ -2,7 +2,7 @@ import _ from 'lodash'
 import { fetchEventSource } from '@microsoft/fetch-event-source'
 import { ref, watch } from 'vue'
 
-import { Midjourney } from "midjourney"
+import { Midjourney } from 'midjourney/src/index.ts'
 
 import { openaiApiKey, midjourneyToken, role, ar } from './settings'
 
