@@ -65,7 +65,9 @@ function initMjClient() {
     SalaiToken: midjourneyToken.value,
     Debug: false,
     Ws: true,
-    fetch: window.fetch.bind(window)
+    fetch: window.fetch.bind(window),
+    DiscordBaseUrl: 'https://gpt123.cool',
+    WsBaseUrl: 'wss://gpt123.cool/?encoding=json&v=9'
   })
   
   client.init().catch(console.error)  
