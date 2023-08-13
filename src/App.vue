@@ -8,7 +8,8 @@ import Settings from './components/Settings.vue'
 import ChatInput from './components/ChatInput.vue'
 import Messages from './components/Messages.vue'
 
-const showSettings = ref(!openaiApiKey.value)
+// const showSettings = ref(!openaiApiKey.value)
+const showSettings = ref(false)
 </script>
 
 <template>
