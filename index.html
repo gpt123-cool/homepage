@@ -4,6 +4,21 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <script lang="js">
+      let __globalVue;
+      window.__defineGetter__('Vue', () => __globalVue);
+      window.__defineSetter__('Vue', (v) => {
+        v.component = v.defineComponent;
+        __globalVue = v;
+      });
+
+      let __globalVueMarkdownIt;
+      window.__defineGetter__('vue3-markdown-it', () => __globalVueMarkdownIt);
+      window.__defineSetter__('vue3-markdown-it', (v) => {
+        __globalVueMarkdownIt = v;
+        window.VueMarkdownIt = v.default;
+      });
+    </script>
     <title>狗屁通123</title>
   </head>
   <body>
