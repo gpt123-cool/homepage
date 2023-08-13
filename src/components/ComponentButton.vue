@@ -13,7 +13,7 @@ async function handelClick(u) {
     drawing.value = true
 
     try {
-      const fn = u.label.startsWith('U') ? upscale : makeVariation
+      const fn = u.label?.startsWith('U') ? upscale : makeVariation
       await fn(u)
       active.value = true
     } finally {
