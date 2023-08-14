@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "dev-cf": "npx wrangler pages dev ."
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^6.3.0",
