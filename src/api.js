@@ -13,7 +13,7 @@ export async function completions(content) {
 
     let messageResponse
     for await (const data of fetchSse(
-      'https://api.gpt123.cool/chat',
+      '/chat',
       {
         method: 'POST',
         body: JSON.stringify({ stream: true, model: 'gpt-3.5-turbo', temperature: 0.6, messages: messagesToSend }),
@@ -81,7 +81,7 @@ async function *fetchSse(url, opts, raw = false) {
 
 async function sendToMj(prompt) {
   for await (const msg of fetchSse(
-    'https://api.gpt123.cool/imagine',
+    '/imagine',
     { method: 'POST', body: prompt }
   )) {
     setMessage(msg)
@@ -90,7 +90,7 @@ async function sendToMj(prompt) {
 
 export async function upscale({ id, custom_id }) {
   let lastMsg
-  for await (const msg of fetchSse(`https://api.gpt123.cool/custom?message_id=${id}&custom_id=${custom_id}`)) {
+  for await (const msg of fetchSse(`/custom?message_id=${id}&custom_id=${custom_id}`)) {
     if (msg.t === 'MESSAGE_CREATE') {
       lastMsg = msg
     }
@@ -101,7 +101,7 @@ export async function upscale({ id, custom_id }) {
 }
 
 export async function makeVariation({ id, custom_id }) {
-  for await (const msg of fetchSse(`https://api.gpt123.cool/custom?message_id=${id}&custom_id=${custom_id}`)) {
+  for await (const msg of fetchSse(`/custom?message_id=${id}&custom_id=${custom_id}`)) {
     if (msg.d?.id !== id) {
       setMessage(msg)
     }
@@ -142,7 +142,7 @@ export async function draw(content) {
       } else {
         const msg = [{ role: 'system', content: '将我的话翻译成英文' }, _.last(messages.value)]
         msg[1].content = _.last(msg[1].content.split('\n'))
-        const resp = await fetch('https://api.gpt123.cool/chat', {
+        const resp = await fetch('/chat', {
           method: 'POST',
           body: JSON.stringify({ model: 'gpt-3.5-turbo', temperature: 0.6, messages: msg }),
           headers: {
