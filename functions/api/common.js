@@ -31,8 +31,7 @@ export function discordWs(mjToken) {
       clearTimeout(tm)
       ws.send(`{"op":2,"d":{"token":"${mjToken}","capabilities":8189,"properties":{"os":"Mac OS X","browser":"Chrome","device":""},"compress":false}}`)
 
-      let i = 1
-      const interval = setInterval(() => this._ws.send(`{"op":1,"d":${i++}}`), 40000)
+      const interval = setInterval(() => ws.send(`{"op":1,"d":6}`), 40000)
       ws.addEventListener('close', () => clearInterval(interval))
 
       resovle(ws)
