@@ -12,7 +12,8 @@ export function onRequest({ env }) {
 
       ws.send(`{"op":2,"d":{"token":"${env.MJ_TOKEN}","capabilities":8189,"properties":{"os":"Mac OS X","browser":"Chrome","device":""},"compress":false}}`)
 
-      setTimeout(() => writer.close(), 3000)
+      setTimeout(() => writer.close(), 15000)
+      writer.write('ws connected...\n')
       resolve(new Response(readable, { status: 200, statusText: 'OK', headers: { 'Content-Type': 'text/html' } }))
     })
 
