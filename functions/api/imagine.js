@@ -18,6 +18,8 @@ export function onRequest({ request, env }) {
     await mj.interactions(payload)
 
     ws.addEventListener('message', ({ data }) => {
+      if (data.startsWith('{"t":"READY"')) return
+
       if (data.indexOf(nonce) > 0) {
         sse.write(data)
 
