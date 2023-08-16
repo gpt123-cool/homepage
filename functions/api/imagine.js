@@ -1,4 +1,4 @@
-import { Sse, discordEvents, discordWs, Midjourney } from './common'
+import { Sse, discordWs, Midjourney } from './common'
 
 export function onRequest({ request, env }) {
   if (request.method !== 'POST') return new Response('Hmm~~~?', { status: 404, statusText: 'Not Found.' })
@@ -17,17 +17,17 @@ export function onRequest({ request, env }) {
     const payload = await mj.imaginePaylod(prompt, nonce)
     await mj.interactions(payload)
 
-    for await (const msgTxt of discordEvents(ws)) {
-      if (msgTxt.indexOf(nonce) > 0) {
-        await sse.write(msgTxt)
+    ws.addEventListener('message', ({ data }) => {
+      if (data.indexOf(nonce) > 0) {
+        sse.write(data)
 
-        const msg = JSON.parse(msgTxt)
-        if (mj.isDone(msg)) break
+        const msg = JSON.parse(data)
+        if (mj.isDone(msg)) {
+          ws.close()
+          sse.close()
+        }
       }
-    }
-
-    ws.close()
-    sse.close()
+    })
   }
   
   imagine().catch(e => {

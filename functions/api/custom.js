@@ -1,4 +1,4 @@
-import { Sse, discordEvents, discordWs, Midjourney } from './common'
+import { Sse, discordWs, Midjourney } from './common'
 
 export function onRequest({ request, env }) {
   const sse = Sse()
@@ -17,18 +17,18 @@ export function onRequest({ request, env }) {
     const payload = await mj.customPayload(message_id, custom_id, nonce)
     await mj.interactions(payload)
   
-    for await (const msgTxt of discordEvents(ws)) {
-      if (msgTxt.indexOf(nonce) > 0 || msgTxt.indexOf(message_id) > 0) {
-        const msg = JSON.parse(msgTxt)
+    ws.addEventListener('message', ({ data }) => {
+      if (data.indexOf(nonce) > 0 || data.indexOf(message_id) > 0) {
+        const msg = JSON.parse(data)
         if (msg.d.id !== message_id) {
-          sse.write(msgTxt)
-          if (mj.isDone(msg)) break
+          sse.write(data)
+          if (mj.isDone(msg)) {
+            ws.close()
+            sse.close()        
+          }
         }
       }
-    }
-
-    ws.close()
-    sse.close()
+    })
   }
   
   custom().catch(e => {
