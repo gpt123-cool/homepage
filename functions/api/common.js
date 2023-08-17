@@ -29,7 +29,7 @@ export function discordWs(mjToken) {
     const tm = setTimeout(reject, 5000)
     ws.addEventListener('open', () => {
       clearTimeout(tm)
-      ws.send(`{"op":2,"d":{"token":"${mjToken}","capabilities":8189,"properties":{"os":"Mac OS X","browser":"Chrome","device":""},"compress":false}}`)
+      ws.send(`{"op":2,"d":{"token":"${mjToken}","intents":512,"properties":{"os":"Mac OS X","browser":"Chrome","device":""},"compress":false}}`)
 
       const interval = setInterval(() => ws.send(`{"op":1,"d":6}`), 40000)
       ws.addEventListener('close', () => clearInterval(interval))
