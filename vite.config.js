@@ -16,7 +16,12 @@ export default defineConfig({
           name: 'vue3-markdown-it',
           var: 'VueMarkdownIt',
           path: 'dist/vue3-markdown-it.umd.min.js'
-        }
+        },
+        {
+          name: 'naive-ui',
+          var: 'naive',
+          path: 'dist/index.prod.js'
+        }        
       ]
     })
   ],
