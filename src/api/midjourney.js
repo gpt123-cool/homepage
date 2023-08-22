@@ -52,8 +52,15 @@ export async function draw(content, useGpt = drawMode.value === 'gpt') {
       if (t === 'MESSAGE_CREATE' || t === 'MESSAGE_UPDATE') {
         const { id, /*referenceMessageId,*/ components = [], content, attachments: [{ url, width, height } = {}] } = d
         msg.id = id
-        msg.content = content.replace('- <@1085059674434437130> ', '')
-        msg.components = components
+        msg.components = components.length > 1 ? components : []
+
+        const ct = content.replace('- <@1085059674434437130> ', '')
+        if (ct) {
+          msg.content = ct
+        } else {
+          msg.origin = msg.content
+          msg.content = d.embeds?.[0]?.description
+        }
 
         if (url) {
           const sizeQuery = Math.max(width, height) > 1024 ? `?width=${width / 4}&height=${height / 4}` : ''
