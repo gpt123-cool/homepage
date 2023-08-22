@@ -30,11 +30,18 @@ export function onRequest({ request, env }) {
         }
       }
     })
+
+    function onClose() {
+      sse.write({ error: 'Closed...' })
+      sse.close()
+    }
+    ws.addEventListener('close', onClose)
+    ws.addEventListener('error', onClose)
   }
   
   imagine().catch(e => {
     console.error(e)
-    sse.write({ error: 'Opps...' })
+    sse.write({ error: 'Opps...', e })
     sse.close()
   })
 

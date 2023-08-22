@@ -48,7 +48,9 @@ export async function draw(content, useGpt = drawMode.value === 'gpt') {
     
     content += ar.value
     const fp = await fetchParser('/api/imagine', { method: 'POST', body: content })
-    for await (const { data: { t, d } } of fp.sse(true)) {
+    for await (const { data: { t, d, error } } of fp.sse(true)) {
+      if (error) console.error(error)
+      
       if (t === 'MESSAGE_CREATE' || t === 'MESSAGE_UPDATE') {
         const { id, /*referenceMessageId,*/ components = [], content, attachments: [{ url, width, height } = {}] } = d
         msg.id = id
