@@ -11,7 +11,7 @@ const languages = [
 <template>
   <div class="page">
     <n-card :title="$t('ui.ui')">
-      <n-grid :cols="4">
+      <n-grid cols="1 400:2 600:3 800:4 1000:5 1200:6">
         <n-form-item-gi :label="$t('ui.language')">
           <n-select :options="languages" v-model:value="language" />
         </n-form-item-gi>
