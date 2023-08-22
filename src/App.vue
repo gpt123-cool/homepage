@@ -38,6 +38,14 @@ const rightNav = allRoutes.slice(2)
   </n-config-provider>
 </template>
 
+<style>
+.page {
+  height: calc(100vh - 62px);
+  padding: 10px 15px;
+  box-sizing: border-box;
+}
+</style>
+
 <style scoped lang="scss">
 .head {
   padding: 10px 15px;
