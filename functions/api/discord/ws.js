@@ -1,26 +1,24 @@
-import { Sse } from '../common'
 
 export function onRequest({ request, env }) {
-  const sse = Sse()
+  const upgradeHeader = request.headers.get('Upgrade')
+  if (!upgradeHeader || upgradeHeader !== 'websocket') {
+    return new Response('Expected Upgrade: websocket', { status: 426 })
+  }
 
-  const ws = new WebSocket('wss://ws.gpt123.cool/?encoding=json&v=9')
-  ws.addEventListener('message', ({ data }) => sse.write(data))
+  const [client, server] = Object.values(new WebSocketPair())
+  server.accept()
 
+  const ws = new WebSocket('wss://ws.gpt123.cool/?encoding=json&v=9&compress=zlib-stream')
+  ws.addEventListener('message', ({ data }) => server.send(data))
+  ws.addEventListener('close', () => server.close())
+  ws.addEventListener('error', () => server.close())
   ws.addEventListener('open', () => {
-    const interval = setInterval(() => ws.send(`{"op":1,"d":6}`), 40000)
- 
-    ws.addEventListener('close', () => {
-      clearInterval(interval)
-      sse.close()
-    })
-
-    ws.addEventListener('error', () => {
-      clearInterval(interval)
-      sse.close()
-    })
-
+    setInterval(() => ws.send(`{"op":1,"d":6}`), 40000)
     ws.send(`{"op":2,"d":{"token":"${env.MJ_TOKEN}","intents":512,"properties":{"os":"Mac OS X","browser":"Chrome","device":""},"compress":true}}`)
   })
- 
-  return sse.response
+
+  return new Response(null, {
+    status: 101,
+    webSocket: client,
+  })
 }
