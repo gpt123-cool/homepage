@@ -1,7 +1,8 @@
 <script setup>
 import _ from 'lodash'
 import { ref, watch } from 'vue'
-import { NSpace, NCard } from 'naive-ui'
+import { NSpace, NIcon } from 'naive-ui'
+import { Robot, User } from '@vicons/fa'
 import Markdown from 'vue3-markdown-it'
 
 import ChatInput from '../components/ChatInput.vue'
@@ -18,10 +19,15 @@ watch(() => _.last(messages.value)?.content, scrollToBottom)
       abc
     </div> -->
     <div class="messages" ref="el">
-      <n-space vertical>
-        <n-card v-for="message in messages" :key="message.id" bordered size="small">
-          <markdown :source="message.content"></markdown>
-        </n-card>
+      <n-space vertical size="large">
+        <div class="message" v-for="{ content, role } in messages">
+          <n-icon class="icon" v-if="role === 'assistant'" :component="Robot" size="24" />
+          <div style="flex-grow: 1;" v-if="role === 'user'"></div>
+          <div :class="{ user: role === 'user', content: true }">
+            <markdown :source="content"></markdown>
+          </div>
+          <n-icon class="icon" v-if="role === 'user'" :component="User" size="24" />
+        </div>
       </n-space>
     </div>
     <chat-input :disabled="thinking" @send="chat" />
@@ -37,6 +43,28 @@ watch(() => _.last(messages.value)?.content, scrollToBottom)
     flex: 1;
     margin-bottom: 10px;
     overflow-y: auto;
+
+    .message {
+      display: flex;
+      gap: 15px;
+
+      .icon {
+        margin-top: 12px;
+      }
+
+      .content {
+        flex-grow: 1;
+        background-color: #35373a;
+        border-radius: 10px;
+        padding: 0 10px;
+
+        &.user {
+          flex-grow: 0;
+          background-color: #59b169;
+          color: black;
+        }
+      }
+    }
   }
 }
 </style>
