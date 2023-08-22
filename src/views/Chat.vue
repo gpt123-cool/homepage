@@ -24,7 +24,7 @@ watch(() => _.last(messages.value)?.content, scrollToBottom)
           <n-icon class="icon" v-if="role === 'assistant'" :component="Robot" size="24" />
           <div style="flex-grow: 1;" v-if="role === 'user'"></div>
           <div :class="{ user: role === 'user', content: true }">
-            <markdown :source="content"></markdown>
+            <markdown :source="content || '...'"></markdown>
           </div>
           <n-icon class="icon" v-if="role === 'user'" :component="User" size="24" />
         </div>
@@ -53,7 +53,7 @@ watch(() => _.last(messages.value)?.content, scrollToBottom)
       }
 
       .content {
-        flex-grow: 1;
+        // flex-grow: 1;
         background-color: #35373a;
         border-radius: 10px;
         padding: 0 10px;
