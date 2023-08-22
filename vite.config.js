@@ -4,6 +4,14 @@ import { Plugin as importToCDN, autoComplete } from 'vite-plugin-cdn-import'
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  server: {
+    proxy: {
+      "/api": {
+        target: "https://gpt123.cool",
+        changeOrigin: true
+      },
+    },
+  },
   plugins: [
     vue(),
     splitVendorChunkPlugin(),

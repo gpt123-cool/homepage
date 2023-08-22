@@ -1,5 +1,7 @@
 <script setup>
 import ChatInput from '../components/ChatInput.vue'
+
+import { thinking, messages, chat } from '../api/openai'
 </script>
 
 <template>
@@ -8,9 +10,9 @@ import ChatInput from '../components/ChatInput.vue'
       abc
     </div> -->
     <div class="messages">
-      mmm
+      {{ messages }}
     </div>
-    <chat-input />
+    <chat-input :disabled="thinking" @send="chat" />
   </div>
 </template>
 
