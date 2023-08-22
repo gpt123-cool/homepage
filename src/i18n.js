@@ -14,7 +14,8 @@ const messages = {
     ui: {
       ui: 'UI',
       language: 'Language',
-      enterToSend: 'Enter to send?'
+      enterToSend: 'Enter to send?',
+      pressEnterToSend: '[Enter to send]'
     }
   },
   'zh-CN': {
@@ -27,7 +28,8 @@ const messages = {
     ui: {
       ui: '界面',
       language: '语言',
-      enterToSend: '回车发送?'
+      enterToSend: '回车发送?',
+      pressEnterToSend: '[回车发送]'
     }
   }
 }
