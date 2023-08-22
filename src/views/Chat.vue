@@ -1,9 +1,15 @@
 <script setup>
+import _ from 'lodash'
+import { ref, watch } from 'vue'
 import { NSpace, NCard } from 'naive-ui'
 import Markdown from 'vue3-markdown-it'
 
 import ChatInput from '../components/ChatInput.vue'
 import { thinking, messages, chat } from '../api/openai'
+
+const el = ref(null)
+const scrollToBottom = _.throttle(() => { if (el.value) el.value.scrollTop = el.value.scrollHeight }, 20)
+watch(() => _.last(messages.value)?.content, scrollToBottom)
 </script>
 
 <template>
@@ -11,11 +17,13 @@ import { thinking, messages, chat } from '../api/openai'
     <!-- <div class="role">
       abc
     </div> -->
-    <n-space class="messages" vertical>
-      <n-card v-for="message in messages" :key="message.id" bordered size="small">
-        <markdown :source="message.content"></markdown>
-      </n-card>
-    </n-space>
+    <div class="messages" ref="el">
+      <n-space vertical>
+        <n-card v-for="message in messages" :key="message.id" bordered size="small">
+          <markdown :source="message.content"></markdown>
+        </n-card>
+      </n-space>
+    </div>
     <chat-input :disabled="thinking" @send="chat" />
   </div>
 </template>
