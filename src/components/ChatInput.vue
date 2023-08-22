@@ -14,8 +14,8 @@ function send() {
 
 <template>
   <div class="chat-input">
-    <n-input :disabled="disabled" v-model:value="value" type="textarea" :resizable="false" clearable :autosize="{ minRows: 1, maxRows: 3 }" />
-    <n-button @click="send" :disabled="disabled" type="info">发送</n-button>
+    <n-input :disabled="disabled" :placeholder="$t('input.placeholder')" v-model:value="value" type="textarea" :resizable="false" clearable :autosize="{ minRows: 1, maxRows: 3 }" />
+    <n-button @click="send" :disabled="disabled" type="info">{{ $t('button.send') }}</n-button>
   </div>
 </template>
 
