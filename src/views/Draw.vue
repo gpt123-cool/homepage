@@ -1,19 +1,24 @@
 <script setup>
+import _ from 'lodash'
+import { ref, watch } from 'vue'
 import { NSpace } from 'naive-ui'
 import { messages, draw, drawing } from '../api/midjourney'
 
 import ChatInput from '../components/ChatInput.vue'
 
+const el = ref(null)
+const scrollToBottom = _.throttle(() => { if (el.value) el.value.scrollTop = el.value.scrollHeight }, 20)
+watch(() => _.last(messages.value)?.content, scrollToBottom)
 </script>
 
 <template>
   <div class="page">
-    <div class="messages">
+    <div class="messages" ref="el">
       <n-space vertical size="large">
         <div v-for="{ origin, img, content, components } of messages" class="message">
           <div v-if="origin">{{ origin }}</div>
           <div>{{ content }}</div>
-          <img v-if="img?.url" :src="img.url" />
+          <img v-if="img?.url" :src="img.url" @load="scrollToBottom" />
           <!-- {{ components }} -->
         </div>
       </n-space>
