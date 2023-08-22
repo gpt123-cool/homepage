@@ -17,3 +17,26 @@ For example, 'A majestic snow leopard perched on a rocky outcropping, surveying 
 Example input: retro futuristic photographies that have like a fashion look, with cool pastel tones with one warm accent color (e.g. pink), and the subjects of the photos need to be cyborgs, robots, enhanced humans or animals
 Output: An enhanced human male top model wearing an avant-garde retro-futuristic outfit designed by Vivienne Westwood, walking on a cool, muted pastel-toned floating walkway with warm orange accents, inspired by the art of Maxfield Parrish and the fashion photography of Rankin.
 Never exceed 250 tokens, and try to keep it under 200.`
+
+export const ars = [{
+  name: '1:1',
+  value: ''
+}, {
+  name: '9:16',
+  value: ' --ar 9:16'
+}, {
+  name: '16:9',
+  value: ' --ar 16:9'
+}, {
+  name: '4:3',
+  value: ' --ar 4:3'
+}, {
+  name: '3:4',
+  value: ' --ar 3:4'
+}, {
+  name: '9:16 v4',
+  value: ' --v 4 --upbeta --ar 9:16'
+}, {
+  name: '16:9 v4',
+  value: ' --v 4 --upbeta --ar 16:9'
+}]

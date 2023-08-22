@@ -1,6 +1,7 @@
 import { createI18n } from 'vue-i18n'
 
-const userLanguage = navigator.language || navigator.userLanguage
+import { language } from './settings'
+import { watch } from 'vue'
 
 const messages = {
   'en-US': {
@@ -21,8 +22,11 @@ const messages = {
   }
 }
 
-export default createI18n({
-  locale: userLanguage,
+const i18n = createI18n({
+  locale: language.value,
   fallbackLocale: 'en-US',
   messages
 })
+
+watch(language, lang => i18n.global.locale = lang)
+export default i18n
