@@ -12,6 +12,7 @@ const messages = {
       send: 'Send'
     },
     ui: {
+      title: 'GPT123',
       ui: 'UI',
       language: 'Language',
       enterToSend: 'Enter to send?',
@@ -26,6 +27,7 @@ const messages = {
       send: '发送'
     },
     ui: {
+      title: '狗屁通123',
       ui: '界面',
       language: '语言',
       enterToSend: '回车发送?',
@@ -40,5 +42,10 @@ const i18n = createI18n({
   messages
 })
 
-watch(language, lang => i18n.global.locale = lang)
+document.title = i18n.global.t('ui.title')
+watch(language, lang => {
+  i18n.global.locale = lang
+  document.title = i18n.global.t('ui.title')
+})
+
 export default i18n
