@@ -1,5 +1,6 @@
 import _ from 'lodash'
 import { ref } from 'vue'
+import fetchParser from '@async-util/fetch'
 
 import { chatCompletion } from './openai'
 import { MIDJOURNEY_EXPLANATION, ars } from './constants'
@@ -15,6 +16,7 @@ export async function draw(content, useGpt = true) {
     const msg = _.last(messages.value)
 
     if (useGpt) {
+      msg.origin = content
       msg.content = ''
       for await (const delta of chatCompletion([
         { role: 'system', content: MIDJOURNEY_EXPLANATION },
@@ -23,7 +25,6 @@ export async function draw(content, useGpt = true) {
         msg.content += delta
       }
 
-      msg.origin = content
       content = msg.content
     } else {
       msg.content = content
@@ -43,6 +44,21 @@ export async function draw(content, useGpt = true) {
     }
 
     if (content.indexOf('Please provide more information') >= 0) return
+
+    const fp = await fetchParser('/api/imagine', { method: 'POST', body: content })
+    for await (const { data: { t, d } } of fp.sse(true)) {
+      if (t === 'MESSAGE_CREATE' || t === 'MESSAGE_UPDATE') {
+        const { id, /*referenceMessageId,*/ components = [], content, attachments: [{ url, width, height } = {}] } = d
+        msg.id = id
+        msg.content = content.replace('- <@1085059674434437130> ', '')
+        msg.components = components
+
+        if (url) {
+          const sizeQuery = Math.max(width, height) > 1024 ? `?width=${width / 4}&height=${height / 4}` : ''
+          msg.img = { url: `${url.replace('cdn.discordapp.com', 'img.gpt123.cool')}${sizeQuery}`, width, height }  
+        }
+      }
+    }
   } finally {
     drawing.value = false
   }
