@@ -1,8 +1,9 @@
 <script setup>
 import _ from 'lodash'
 import { ref, watch } from 'vue'
-import { NSpace } from 'naive-ui'
+import { NSpace, NSelect } from 'naive-ui'
 import { messages, draw, drawing } from '../api/midjourney'
+import { drawModes, drawMode, ars, ar } from '../settings'
 
 import ComponentButton from '../components/ComponentButton.vue'
 import ChatInput from '../components/ChatInput.vue'
@@ -14,6 +15,10 @@ watch(() => _.last(messages.value)?.content, scrollToBottom)
 
 <template>
   <div class="page">
+    <n-space style="padding-bottom: 10px;" size="large">
+      <n-select :options="drawModes" v-model:value="drawMode" :consistent-menu-width="false" />
+      <n-select :options="ars" v-model:value="ar" :consistent-menu-width="false" />
+    </n-space>
     <div class="messages" ref="el">
       <n-space vertical size="large">
         <div v-for="{ id, origin, img, content, components } of messages" class="message">

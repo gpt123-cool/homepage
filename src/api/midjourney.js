@@ -3,12 +3,13 @@ import { ref } from 'vue'
 import fetchParser from '@async-util/fetch'
 
 import { chatCompletion } from './openai'
-import { MIDJOURNEY_EXPLANATION, ars } from './constants'
+import { MIDJOURNEY_EXPLANATION } from './constants'
+import { drawMode, ar } from '../settings'
 
 export const drawing = ref(false)
 export const messages = ref([])
 
-export async function draw(content, useGpt = true) {
+export async function draw(content, useGpt = drawMode.value === 'gpt') {
   drawing.value = true
 
   try {
@@ -45,6 +46,7 @@ export async function draw(content, useGpt = true) {
 
     if (content.toLowerCase().indexOf('please provide more') >= 0) return
     
+    content += ar.value
     const fp = await fetchParser('/api/imagine', { method: 'POST', body: content })
     for await (const { data: { t, d } } of fp.sse(true)) {
       if (t === 'MESSAGE_CREATE' || t === 'MESSAGE_UPDATE') {
