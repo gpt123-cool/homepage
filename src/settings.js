@@ -6,7 +6,13 @@ function localstorageRef(key, defaultValue) {
   return value
 }
 
-const userLanguage = navigator.language || navigator.userLanguage
-const language = localstorageRef('UI.LANGUAGE', userLanguage === 'zh-CN' ? 'zh-CN' : 'en-US')
+function localstorageJsonRef(key, defaultValue) {
+  const value = ref(JSON.parse(localStorage.getItem(key) || JSON.stringify(defaultValue)))
+  watch(value, v => localStorage.setItem(key, JSON.stringify(v)))
+  return value
+}
 
-export { language }
+const userLanguage = navigator.language || navigator.userLanguage
+export const language = localstorageRef('UI.LANGUAGE', userLanguage === 'zh-CN' ? 'zh-CN' : 'en-US')
+
+export const enterToSend = localstorageJsonRef('UI.ENTER_TO_SEND', true)
