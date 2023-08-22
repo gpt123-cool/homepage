@@ -10,9 +10,9 @@ const languages = [
 
 <template>
   <div class="page">
-    <n-card title="UI">
+    <n-card :title="$t('ui.ui')">
       <n-grid :cols="4">
-        <n-form-item-gi label="LANG">
+        <n-form-item-gi :label="$t('ui.language')">
           <n-select :options="languages" v-model:value="language" />
         </n-form-item-gi>
       </n-grid>

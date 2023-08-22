@@ -10,6 +10,10 @@ const messages = {
     },
     button: {
       send: 'Send'
+    },
+    ui: {
+      ui: 'UI',
+      language: 'Language'
     }
   },
   'zh-CN': {
@@ -18,6 +22,10 @@ const messages = {
     },
     button: {
       send: '发送'
+    },
+    ui: {
+      ui: '界面',
+      language: '语言'
     }
   }
 }
