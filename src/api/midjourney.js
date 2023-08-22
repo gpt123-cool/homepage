@@ -43,8 +43,8 @@ export async function draw(content, useGpt = true) {
       content = msg.content
     }
 
-    if (content.indexOf('Please provide more information') >= 0) return
-
+    if (content.toLowerCase().indexOf('please provide more') >= 0) return
+    
     const fp = await fetchParser('/api/imagine', { method: 'POST', body: content })
     for await (const { data: { t, d } } of fp.sse(true)) {
       if (t === 'MESSAGE_CREATE' || t === 'MESSAGE_UPDATE') {
@@ -59,6 +59,40 @@ export async function draw(content, useGpt = true) {
         }
       }
     }
+  } finally {
+    drawing.value = false
+  }
+}
+
+export async function custom(message_id, custom_id) {
+  drawing.value = true
+
+  messages.value.push({ content: '...' })
+  const msg = _.last(messages.value)
+
+  try {
+    const fp = await fetchParser(`/api/custom?${new URLSearchParams({ message_id, custom_id})}`)
+    for await (const { data: { t, d } } of fp.sse(true)) {
+      if (t === 'MESSAGE_CREATE' || t === 'MESSAGE_UPDATE') {
+        if (d.id === message_id) continue
+        
+        const { id, /*referenceMessageId,*/ components = [], content, attachments: [{ url, width, height } = {}] } = d
+        msg.id = id
+        msg.content = content.replace('- <@1085059674434437130> ', '')
+        msg.components = components.filter(c => {
+          c.components = c.components.filter(({ custom_id}) => {
+            return /(variation|upsample|reroll|Outpaint)/ig.test(custom_id)
+          })
+
+          return c.components.length > 0
+        })
+  
+        if (url) {
+          const sizeQuery = custom_id.indexOf('upsample') < 0 && Math.max(width, height) > 1024 ? `?width=${width / 4}&height=${height / 4}` : ''
+          msg.img = { url: `${url.replace('cdn.discordapp.com', 'img.gpt123.cool')}${sizeQuery}`, width, height }  
+        }
+      }
+    }  
   } finally {
     drawing.value = false
   }

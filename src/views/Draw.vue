@@ -4,6 +4,7 @@ import { ref, watch } from 'vue'
 import { NSpace } from 'naive-ui'
 import { messages, draw, drawing } from '../api/midjourney'
 
+import ComponentButton from '../components/ComponentButton.vue'
 import ChatInput from '../components/ChatInput.vue'
 
 const el = ref(null)
@@ -15,11 +16,14 @@ watch(() => _.last(messages.value)?.content, scrollToBottom)
   <div class="page">
     <div class="messages" ref="el">
       <n-space vertical size="large">
-        <div v-for="{ origin, img, content, components } of messages" class="message">
+        <div v-for="{ id, origin, img, content, components } of messages" class="message">
           <div v-if="origin">{{ origin }}</div>
           <div>{{ content }}</div>
           <img v-if="img?.url" :src="img.url" @load="scrollToBottom" />
           <!-- {{ components }} -->
+          <n-space v-for="cs of components" size="small">
+            <component-button v-for="c of cs.components" :message_id="id" :up="c" />
+          </n-space>
         </div>
       </n-space>
     </div>
@@ -45,7 +49,7 @@ watch(() => _.last(messages.value)?.content, scrollToBottom)
 
       img {
         max-width: 100%;
-        margin-top: 10px 0;
+        margin: 10px 0;
       }
     }
   }

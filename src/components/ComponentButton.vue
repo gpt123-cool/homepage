@@ -1,44 +1,35 @@
 <script setup>
 import { ref } from 'vue'
-import { drawing, upscale, makeVariation } from '../api'
+import { NButton } from 'naive-ui'
+import { drawing, custom } from '../api/midjourney'
 
 defineProps({
+  message_id: String,
   up: Object
 })
 
 const active = ref(false)
 
-async function handelClick(u) {
-  if (u.style !== 1 && !active.value) {
-    drawing.value = true
-
-    try {
-      const fn = u.label?.startsWith('U') ? upscale : makeVariation
-      await fn(u)
-      active.value = true
-    } finally {
-      drawing.value = false
-    }
+async function handelClick(message_id, { custom_id, style }) {
+  if (style !== 1 && !active.value) {
+    await custom(message_id, custom_id)
+    active.value = true
   }
+}
+
+function getType(up) {
+  if (up.style === 1 || active.value) return 'info'
 }
 </script>
 
 <template>
-<button :disabled="drawing" @click="() => handelClick(up)" :class="{ active: up.style === 1 || active }">{{ up.label || up.emoji.name }}</button>
+<n-button :disabled="drawing" @click="() => handelClick(message_id, up)" :type="getType(up)">{{ up.label || up.emoji.name }}</n-button>
 </template>
 
 <style scoped>
-.active {
-  background-color: rgb(88, 101, 242);
-  color: white;
-}
-
 button {
   font-family: monospace;
   font-size: large;
-}
-
-button:disabled {
-  color: #475569;
+  margin-bottom: 10px;
 }
 </style>
