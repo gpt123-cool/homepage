@@ -23,7 +23,7 @@ watch(() => _.last(messages.value)?.content, scrollToBottom)
       <n-space vertical size="large">
         <div v-for="{ id, origin, img, content, components } of messages" class="message">
           <div v-if="origin">{{ origin }}</div>
-          <div>{{ content }}</div>
+          <div>{{ content || '...' }}</div>
           <img v-if="img?.url" :src="img.url" @load="scrollToBottom" />
           <!-- {{ components }} -->
           <n-space v-for="cs of components" size="small">

@@ -69,7 +69,7 @@ export async function draw(content, useGpt = drawMode.value === 'gpt') {
 export async function custom(message_id, custom_id) {
   drawing.value = true
 
-  messages.value.push({ content: '...' })
+  messages.value.push({ content: '' })
   const msg = _.last(messages.value)
 
   try {
