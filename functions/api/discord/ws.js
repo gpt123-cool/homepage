@@ -5,10 +5,13 @@ export function onRequest({ request, env }) {
     return new Response('Expected Upgrade: websocket', { status: 426 })
   }
 
+  const url = new URL(request.url)
+  const target = url.searchParams.get('target')
+
   const [client, server] = Object.values(new WebSocketPair())
   server.accept()
 
-  const ws = new WebSocket('wss://ws.gpt123.cool/?encoding=json&v=9&compress=zlib-stream')
+  const ws = new WebSocket(`wss://${target || 'ws.gpt123.cool'}/?encoding=json&v=9&compress=zlib-stream`)
   ws.addEventListener('message', ({ data }) => server.send(data))
   ws.addEventListener('close', () => server.close())
   ws.addEventListener('error', () => server.close())
