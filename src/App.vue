@@ -40,7 +40,12 @@ const rightNav = allRoutes.slice(2)
 
 <style>
 .page {
-  height: calc(100vh - 62px);
+  /* height: calc(100vh - 62px); */
+  position: fixed;
+  top: 62px;
+  left: 0;
+  right: 0;
+  bottom: 0;
   padding: 10px 15px;
   box-sizing: border-box;
 }
