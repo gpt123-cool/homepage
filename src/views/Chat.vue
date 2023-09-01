@@ -57,6 +57,12 @@ watch(() => _.last(messages.value)?.content, scrollToBottom)
         background-color: #35373a;
         border-radius: 10px;
         padding: 0 10px;
+        overflow: hidden;
+
+        pre {
+          width: 100%;
+          overflow-x: scroll;
+        }
 
         &.user {
           flex-grow: 0;
