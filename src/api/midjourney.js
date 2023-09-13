@@ -46,6 +46,7 @@ export async function draw(content, useGpt = drawMode.value === 'gpt') {
 
     if (content.toLowerCase().indexOf('please provide more') >= 0) return
     
+    content = content.replace('--style', '')
     content += ar.value
     const fp = await fetchParser('/api/imagine', { method: 'POST', body: content })
     for await (const { data: { t, d, error } } of fp.sse(true)) {
