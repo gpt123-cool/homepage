@@ -6,7 +6,7 @@ export async function onRequest({ request, env }) {
   const { body, headers, status, statusText } = await fetch('https://api.openai.com/v1/chat/completions', {
     method: 'POST',
     body: JSON.stringify({
-      model: 'gpt-3.5-turbo', temperature: 0.6,
+      temperature: 0.6,
       ...chat
     }),
     headers: {

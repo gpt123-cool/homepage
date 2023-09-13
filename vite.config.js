@@ -6,8 +6,8 @@ import { Plugin as importToCDN, autoComplete } from 'vite-plugin-cdn-import'
 export default defineConfig({
   server: {
     proxy: {
-      "/api": {
-        target: "https://gpt123.cool",
+      '/api': {
+        target: 'https://gpt123.cool',
         changeOrigin: true
       },
     },

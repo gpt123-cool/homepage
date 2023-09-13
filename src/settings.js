@@ -49,3 +49,10 @@ export const ars = [{
 //   label: '16:9 v4',
 //   value: ' --v 4 --upbeta --ar 16:9'
 }]
+
+export const gptVersion = localstorageRef('GPT.VERSION', 'gpt-3.5-turbo')
+export const gptVersions = [
+  { label: 'GPT-3.5', value: 'gpt-3.5-turbo' },
+  { label: 'GPT-3.5-16K', value: 'gpt-3.5-turbo-16k' },
+  { label: 'GPT-4', value: 'gpt-4' }
+]

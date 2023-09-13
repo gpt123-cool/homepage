@@ -14,6 +14,7 @@ const messages = {
     ui: {
       title: 'GPT123',
       ui: 'UI',
+      gptVersion: 'GPT Version',
       language: 'Language',
       enterToSend: 'Enter to send?',
       pressEnterToSend: '[Enter to send]'
@@ -29,6 +30,7 @@ const messages = {
     ui: {
       title: '狗屁通123',
       ui: '界面',
+      gptVersion: 'GPT版本',
       language: '语言',
       enterToSend: '回车发送?',
       pressEnterToSend: '[回车发送]'

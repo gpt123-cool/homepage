@@ -2,13 +2,15 @@ import _ from 'lodash'
 import { ref } from 'vue'
 import fetchParser from '@async-util/fetch'
 
+import { gptVersion } from '../settings'
+
 export const thinking = ref(false)
 export const messages = ref([])
 
 export async function *chatCompletion(messages) {
   const fp = await fetchParser('/api/chat', {
     method: 'POST',
-    body: JSON.stringify({ stream: true, model: 'gpt-3.5-turbo', temperature: 0.6, messages }),
+    body: JSON.stringify({ stream: true, model: gptVersion.value, temperature: 0.6, messages }),
     headers: {
       // 'Authorization': `Bearer ${openaiApiKey.value.trim()}`,
       'Content-Type': 'application/json'
