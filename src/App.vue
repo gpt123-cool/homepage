@@ -1,8 +1,19 @@
 <script setup>
-import { h } from 'vue'
+import { h, watch } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 import { NIcon, NConfigProvider, NGlobalStyle, NNotificationProvider, darkTheme, NLayout, NLayoutHeader, NLayoutContent, NMenu } from 'naive-ui'
 
 import { routes } from './routes'
+import { openaiApiKey } from './settings';
+
+const route = useRoute()
+const router = useRouter()
+watch(() => route.query, ({ token }) => {
+  if (token !== undefined) {
+    openaiApiKey.value = token
+    router.replace(route.path)
+  }
+})
 
 const allRoutes = routes.map(r => ({ label: r.icon ? '' : r.name, key: r.path, icon: r.icon && (() => h(NIcon, { component: r.icon })) }))
 const leftNav = allRoutes.slice(0, 2)

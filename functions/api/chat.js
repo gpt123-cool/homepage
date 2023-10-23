@@ -1,6 +1,7 @@
 
 export async function onRequest({ request, env }) {
   if (request.method !== 'POST') return new Response('Hmm~~~?', { status: 404, statusText: 'Not Found.' })
+  const authorization = request.headers.get('Authorization')
 
   const chat = await request.json()
   const { body, headers, status, statusText } = await fetch('https://api.openai.com/v1/chat/completions', {
@@ -10,7 +11,7 @@ export async function onRequest({ request, env }) {
       ...chat
     }),
     headers: {
-      'Authorization': `Bearer ${env.GPT_TOKEN}`,
+      'Authorization': authorization || `Bearer ${env.GPT_TOKEN}`,
       'Content-Type': 'application/json'
     }
   })
