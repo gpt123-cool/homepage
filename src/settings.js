@@ -56,3 +56,5 @@ export const gptVersions = [
   { label: 'GPT-3.5-16K', value: 'gpt-3.5-turbo-16k' },
   { label: 'GPT-4', value: 'gpt-4' }
 ]
+
+export const openaiApiKey = localstorageRef('GPT.KEY', '')

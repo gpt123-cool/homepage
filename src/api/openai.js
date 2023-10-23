@@ -2,7 +2,7 @@ import _ from 'lodash'
 import { ref } from 'vue'
 import fetchParser from '@async-util/fetch'
 
-import { gptVersion } from '../settings'
+import { gptVersion, openaiApiKey } from '../settings'
 
 export const thinking = ref(false)
 export const messages = ref([])
@@ -12,7 +12,7 @@ export async function *chatCompletion(messages) {
     method: 'POST',
     body: JSON.stringify({ stream: true, model: gptVersion.value, temperature: 0.6, messages }),
     headers: {
-      // 'Authorization': `Bearer ${openaiApiKey.value.trim()}`,
+      ...openaiApiKey.value.trim() ? { 'Authorization': `Bearer ${openaiApiKey.value.trim()}` } : {},
       'Content-Type': 'application/json'
     }
   })
