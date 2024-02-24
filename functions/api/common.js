@@ -42,7 +42,7 @@ export function discordWs(mjToken) {
 const ServerId = '1086185404337762374'
 const guild_id = ServerId
 const channel_id = '1086185404337762377'
-const session_id = '8bb7f5b79c7a49f7d0824ab4b8773a81'
+const session_id = 'c2d354673b0caec475fe4ac13ac509e2'
 
 function toPayload(data, nonce) {
   return {
