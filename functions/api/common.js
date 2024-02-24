@@ -97,24 +97,16 @@ export class Midjourney {
   }
 
   async getCommand(name) {
-    const searchParams = new URLSearchParams({
-      type: '1',
-      query: name,
-      limit: '1',
-      include_applications: 'true'
-    })
-  
     const response = await fetch(
-      `https://discord.com/api/v9/channels/${channel_id}/application-commands/search?${searchParams}`,
+      `https://discord.com/api/v10/guilds/${guild_id}/application-command-index`,
       { headers: { authorization: this.MJ_TOKEN }
     })
 
     const data = await response.json()
-    if (data?.application_commands?.[0]) {
-      return data.application_commands[0]
-    }
-  
-    throw new Error(`Failed to get application_commands for command ${name}`)
+    const command = data?.application_commands?.find(c => c.name === name)
+
+    if (command) return command  
+    else throw new Error(`Failed to get application_commands for command ${name}`)
   }
 
   async interactions(payload) {
