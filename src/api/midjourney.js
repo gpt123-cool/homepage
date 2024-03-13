@@ -35,7 +35,7 @@ export async function draw(content, useGpt = drawMode.value === 'gpt') {
     if (!isEnglish) {
       msg.content = ''
       for await (const delta of chatCompletion([
-        { role: 'system', content: 'Translate to english.' },
+        { role: 'system', content: '将我说的话翻译成英语，仅输出翻译的部分。' },
         { role: 'user', content }
       ])) {
         msg.content += delta
