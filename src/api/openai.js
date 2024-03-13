@@ -31,10 +31,16 @@ async function *gpt(messages) {
 }
 
 async function *claude(messages) {
+  messages = messages.map(({ role, content }) => ({ role, content: [ { type: 'text', text: content } ] }))
+  if (messages[0].role === 'system') {
+    const { content } = messages.shift()
+    messages.find(m => m.role === 'user').content.unshift({ type: 'text', text: content })
+  }
+
   const fp = await fetchParser('/api/claude', {
     method: 'POST',
     body: JSON.stringify({
-      messages: messages.map(({ role, content }) => ({ role, content: [ { type: 'text', text: content } ] })),
+      messages,
       anthropic_version: 'bedrock-2023-05-31',
       max_tokens: 1024 * 16,
       temperature: 0.5,
@@ -47,7 +53,7 @@ async function *claude(messages) {
 
   for await (const { data } of fp.sse(true)) {
     if (data.error) throw new Error(error)
-    
+
     const delta = data.delta?.text
     if (delta) yield delta
   }
