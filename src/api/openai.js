@@ -31,8 +31,9 @@ async function *gpt(messages) {
 }
 
 async function *claude(messages) {
+  const system = messages[0].role === 'system' ? messages.shift().content : undefined
   messages = messages.map(({ role, content }) => ({ role, content: [ { type: 'text', text: content } ] }))
-  const system = messages[0].role === 'system' ? messages.shift().content?.text : null
+  console.log('claude', { system, messages }) 
 
   const fp = await fetchParser('/api/claude', {
     method: 'POST',
