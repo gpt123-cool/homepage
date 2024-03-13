@@ -32,14 +32,12 @@ async function *gpt(messages) {
 
 async function *claude(messages) {
   messages = messages.map(({ role, content }) => ({ role, content: [ { type: 'text', text: content } ] }))
-  if (messages[0].role === 'system') {
-    const { content: [{ text }] } = messages.shift()
-    messages.find(m => m.role === 'user').content.unshift({ type: 'text', text })
-  }
+  const system = messages[0].role === 'system' ? messages.shift().content?.text : null
 
   const fp = await fetchParser('/api/claude', {
     method: 'POST',
     body: JSON.stringify({
+      system,
       messages,
       anthropic_version: 'bedrock-2023-05-31',
       max_tokens: 1024 * 16,
