@@ -1,9 +1,6 @@
 export const MIDJOURNEY_EXPLANATION = 
-`Your goal is to create Midjourney prompts, in the form of [some prompt with optional parameters].
-optional parameters are explained below, and should be in the form --parameter [value].
+`Your goal is to create Midjourney prompts, in the form of [some prompt].
 Midjourney is an AI program that generates images from natural language prompts. 
-Valid parameters: 
-- negative prompting (--no, e.g., --no plants to remove plants from the image), 
 Weights: you can give weights to part of the prompt, and it can be really important to stress some concepts. Most of the time they're not needed.
 To use them, add [SUBJECT]::WEIGHT to the prompt, e.g., [A house]::2 [that looks like a cat]::3 [in the style of X]::3.
 Normal weight is 1 (so you don't need to specify it), negative prompts are of weight -1 and overall weight should be >= 0.
