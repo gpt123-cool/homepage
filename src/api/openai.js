@@ -46,6 +46,8 @@ async function *claude(messages) {
   })
 
   for await (const { data } of fp.sse(true)) {
+    if (data.error) throw new Error(error)
+    
     const delta = data.delta?.text
     if (delta) yield delta
   }
