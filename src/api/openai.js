@@ -7,7 +7,7 @@ import { gptVersion, openaiApiKey } from '../settings'
 export const thinking = ref(false)
 export const messages = ref([])
 try {
-  messages.value = JSON.parse(localStorage.getItem('chat-messages'))
+  messages.value = JSON.parse(localStorage.getItem('chat-messages')) || []
 } catch (e) { }
 
 export async function *chatCompletion(messages) {
