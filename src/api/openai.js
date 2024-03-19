@@ -6,6 +6,9 @@ import { gptVersion, openaiApiKey } from '../settings'
 
 export const thinking = ref(false)
 export const messages = ref([])
+try {
+  messages.value = JSON.parse(localStorage.getItem('chat-messages'))
+} catch (e) { }
 
 export async function *chatCompletion(messages) {
   switch (gptVersion.value) {
@@ -79,6 +82,8 @@ export async function chat(content) {
     for await (const delta of chatCompletion(messagesToSend)) {
       assistantResp.content += delta
     }
+
+    localStorage.setItem('chat-messages', JSON.stringify(messages.value.filter(m => !m.error && (m.role === 'user' || m.role === 'assistant')).slice(-50)))
   } catch (e) {
     const msg = _.last(messages.value)
     msg.error = true
