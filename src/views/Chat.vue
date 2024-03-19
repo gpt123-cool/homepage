@@ -11,6 +11,7 @@ import { thinking, messages, chat } from '../api/openai'
 const el = ref(null)
 const scrollToBottom = _.throttle(() => { if (el.value) el.value.scrollTop = el.value.scrollHeight }, 20)
 watch(() => _.last(messages.value)?.content, scrollToBottom)
+setTimeout(scrollToBottom, 100)
 </script>
 
 <template>
