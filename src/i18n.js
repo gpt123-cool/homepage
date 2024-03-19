@@ -17,7 +17,8 @@ const messages = {
       gptVersion: 'GPT Version',
       language: 'Language',
       enterToSend: 'Enter to send?',
-      pressEnterToSend: '[Enter to send]'
+      pressEnterToSend: '[Enter to send]',
+      clear: 'Clear data'
     }
   },
   'zh-CN': {
@@ -33,7 +34,8 @@ const messages = {
       gptVersion: 'GPT版本',
       language: '语言',
       enterToSend: '回车发送?',
-      pressEnterToSend: '[回车发送]'
+      pressEnterToSend: '[回车发送]',
+      clear: '清空数据'
     }
   }
 }
