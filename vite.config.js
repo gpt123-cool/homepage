@@ -4,11 +4,19 @@ import { Plugin as importToCDN, autoComplete } from 'vite-plugin-cdn-import'
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  server: {
+    proxy: {
+      '/api': {
+        target: 'https://gpt123.cool',
+        changeOrigin: true
+      },
+    },
+  },
   plugins: [
     vue(),
     splitVendorChunkPlugin(),
     importToCDN({
-      prodUrl: 'https://npm.elemecdn.com/{name}@{version}/{path}',
+      prodUrl: 'https://cdn.gpt123.cool/{name}@{version}/{path}',
       modules: [
         autoComplete('vue'),
         autoComplete('lodash'),
@@ -16,7 +24,12 @@ export default defineConfig({
           name: 'vue3-markdown-it',
           var: 'VueMarkdownIt',
           path: 'dist/vue3-markdown-it.umd.min.js'
-        }
+        },
+        {
+          name: 'naive-ui',
+          var: 'naive',
+          path: 'dist/index.prod.js'
+        }        
       ]
     })
   ],

@@ -1,21 +1,15 @@
 import { createApp } from 'vue'
-import './style.css'
-import App from './App.vue'
+import { createRouter, createWebHashHistory } from 'vue-router'
 
 import 'highlight.js/styles/monokai.css'
 
-/* import the fontawesome core */
-import { library } from '@fortawesome/fontawesome-svg-core'
+import i18n from './i18n'
+import App from './App.vue'
+import { routes } from './routes.js'
 
-/* import font awesome icon component */
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+const router = createRouter({
+  history: createWebHashHistory(),
+  routes
+})
 
-/* import specific icons */
-import { faGear, faUser, faTrash } from '@fortawesome/free-solid-svg-icons'
-
-/* add icons to the library */
-library.add(faGear, faUser, faTrash)
-
-createApp(App)
-  .component('font-awesome-icon', FontAwesomeIcon)
-  .mount('#app')
+createApp(App).use(i18n).use(router).mount('#app')
