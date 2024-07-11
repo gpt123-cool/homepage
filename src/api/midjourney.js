@@ -67,7 +67,8 @@ export async function draw(content, useGpt = drawMode.value === 'gpt') {
 
         if (url) {
           const sizeQuery = Math.max(width, height) > 1024 ? `?width=${width / 4}&height=${height / 4}` : ''
-          msg.img = { url: `${url.replace('cdn.discordapp.com', 'img.gpt123.cool')}${sizeQuery}`, width, height }  
+          // msg.img = { url: `${url.replace('cdn.discordapp.com', 'img.gpt123.cool')}${sizeQuery}`, width, height }
+          msg.img = { url: `${url}${sizeQuery}`, width, height }  
         }
       }
     }
@@ -101,7 +102,8 @@ export async function custom(message_id, custom_id) {
   
         if (url) {
           const sizeQuery = custom_id.indexOf('upsample') < 0 && Math.max(width, height) > 1024 ? `?width=${width / 4}&height=${height / 4}` : ''
-          msg.img = { url: `${url.replace('cdn.discordapp.com', 'img.gpt123.cool')}${sizeQuery}`, width, height }  
+          // msg.img = { url: `${url.replace('cdn.discordapp.com', 'img.gpt123.cool')}${sizeQuery}`, width, height }
+          msg.img = { url: `${url}${sizeQuery}`, width, height }
         }
       }
     }  
