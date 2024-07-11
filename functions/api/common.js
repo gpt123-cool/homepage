@@ -24,8 +24,8 @@ export function Sse() {
 
 export function discordWs(mjToken) {
   return new Promise((resovle, reject) => {
-    // const ws = new WebSocket('wss://gateway.discord.gg/?encoding=json&v=9')
-    const ws = new WebSocket('wss://ws.gpt123.cool/?encoding=json&v=9')
+    const ws = new WebSocket('wss://gateway.discord.gg/?encoding=json&v=9')
+    // const ws = new WebSocket('wss://ws.gpt123.cool/?encoding=json&v=9')
     const tm = setTimeout(reject, 5000)
     ws.addEventListener('open', () => {
       clearTimeout(tm)
