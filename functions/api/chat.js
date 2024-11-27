@@ -1,5 +1,5 @@
-// const url = 'https://api.openai.com/v1/chat/completions'
-const url = 'https://api.gpt123.cool/v1/chat/completions'
+const url = 'https://api.openai.com/v1/chat/completions'
+// const url = 'https://api.gpt123.cool/v1/chat/completions'
 
 export async function onRequest({ request, env }) {
   if (request.method !== 'POST') return new Response('Hmm~~~?', { status: 404, statusText: 'Not Found.' })
